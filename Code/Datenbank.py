@@ -2,7 +2,7 @@
 from ErrorClass import ConnectionError
 
 
-def connect_database(host, port, user, passwd, db):
+def connect_database(host="localhost", port=3306, user="Red", passwd="red-brick42", db="tf"):
 	""" Tries to connect to the databse. 
 		Raises Connection Eroor """
 	try:
