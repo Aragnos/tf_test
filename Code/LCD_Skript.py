@@ -11,9 +11,12 @@ UID_LCD = "BFX"
 HOST = "localhost"
 PORT = 4223
 
+
 '''
 Not working with current setup, connect LCD from beginning and disconnect later?
 '''
+
+
 def lcd_callback(button):
 	print(button)
 	if button == 1:

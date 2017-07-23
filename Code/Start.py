@@ -15,7 +15,7 @@ database = "tf"
 
 try:
 	conn = DB.connect_database(database_host, database_port, user, passwd, database)
-except ErrorClass.ConnectionError as e:
+except ErrorClass.DatabaseError as e:
 	print(e.msg)
 
 # LCD.connect_lcd()
