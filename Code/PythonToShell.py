@@ -1,9 +1,9 @@
 ﻿from subprocess import Popen, PIPE
-from ErrorClass import ConnError
+from ErrorClass import ConnectionError
 
 try:
 	x = 1.0/2
-	raise ConnError("Test Error Raise")
+	raise ConnectionError("Test Error Raise")
 	y = 2/1
 	#proc = Popen('dir', stdout=PIPE, shell=True)
 	#proc.wait()
