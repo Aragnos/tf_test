@@ -1,5 +1,7 @@
 """ Execution of shell commands """
 from subprocess import Popen, PIPE
+from ErrorClass import PopenFormatError
+import types
 # Todo refactor WLAN.py
 
 
@@ -38,7 +40,7 @@ def sudo_popen_wait(command):
 
 
 def check_type(command):
-	if type(command) == 'list':
+	if isinstance(command, types.ListType):
 		return
 	else:
-		raise # Todo new error
+		raise PopenFormatError()

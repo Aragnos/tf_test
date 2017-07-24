@@ -29,3 +29,10 @@ class ConnectionError(Error):
 
 	def __init__(self, msg):
 		self.msg = msg
+
+
+class PopenFormatError(Error):
+	""" Raised if command given to popen method is not a list"""
+
+	def __init__(self):
+		self.msg = "Command should be a list"
