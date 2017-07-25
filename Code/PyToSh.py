@@ -39,7 +39,7 @@ def sudo_popen_wait(command):
 	return
 
 
-def popoen_pipe(command_one, command_two):
+def popen_pipe(command_one, command_two):
 	""" Popen with pipelining """
 	check_type(command_one)
 	check_type(command_two)

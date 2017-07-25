@@ -41,18 +41,47 @@ def restart_interface(iface):
 """ Configuration of the RED Brick to use WLAN """
 
 
-def wpa_supplicant():
+def wpa_supplicant(username, password):
 	""" Creates the wpa_supplicant configuration"""
 	# Todo
-	config_string = ""
+	preemble_string = """ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=tf
+eapol_version=1
+ap_scan=1\n\n"""
+
+	config_string = '''network={{
+	ssid="RZUWsec"
+	mode=0
+	proto=WPA2
+	key_mgmt=WPA-EAP
+	pairwise=CCMP
+	group=CCMP
+	eap=TTLS
+	phase2="auth=PAP"
+	ca_cert="/etc/ssl/certs/Deutsche_Telekom_Root_CA_2.pem"
+	anonymous_identity="anonymous@uni-wuerzburg.de"
+	identity="{0}@uni-wuerzburg.de"
+	password="{1}"
+	priority=10
+	}}'''.format(username, password)
+
+	complete_config = preemble_string + config_string
 	supplicant_file = "/etc/wpa_supplicant/wpa_supplicant.conf"
-	cmd_one = ["echo", config_string]
-	cmd_two = ["tee", "sudo", "nano", supplicant_file]
-	PyToSh.popoen_pipe(cmd_one, cmd_two)
+	cmd_one = ["echo", complete_config]
+	cmd_two = ["sudo", "tee", supplicant_file]
+	PyToSh.popen_pipe(cmd_one, cmd_two)
 	return
 
 
-def interfaces():
+def interfaces(iface_name):
 	""" Extends the interface file"""
 	# Todo
+	config_string = '''auto {0}	
+	iface {0} inet dhcp
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf'''.format(iface_name)
+	interfaces_file = '/etc/network/interfaces'
+	cmd_one = ["echo", config_string]
+	cmd_two = ["sudo", "tee", "-a", interfaces_file]
+	PyToSh.popen_pipe(cmd_one, cmd_two)
 	return
+
