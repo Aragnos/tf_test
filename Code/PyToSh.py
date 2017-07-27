@@ -2,13 +2,12 @@
 from subprocess import Popen, PIPE
 from ErrorClass import PopenFormatError
 import types
-# Todo refactor WLAN.py
 
 
 def popen_comm(command):
 	""" Popen with communicate, returns output """
 	check_type(command)
-	p^= Popen(command, stdout=PIPE)
+	p = Popen(command, stdout=PIPE)
 	output = p.communicate()[0]
 	return output
 
@@ -25,7 +24,7 @@ def sudo_popen_comm(command):
 	""" Popen with communicate, returns output """
 	check_type(command)
 	command.insert(0, "sudo")
-	p= Popen(command, stdout=PIPE)
+	p = Popen(command, stdout=PIPE)
 	output = p.communicate()[0]
 	return output
 
@@ -55,3 +54,14 @@ def check_type(command):
 		return
 	else:
 		raise PopenFormatError()
+
+
+def change_premissions(password):
+	""" Changes the permissions so sudo can be used without password """
+	# Todo required?
+	command = ['sudo', 'visudo']
+	add = 'tf ALL=(ALL) NOPASSWD: ALL'
+	p = Popen(command, stdout=PIPE, stdin=PIPE)
+	output = p.communicate(password)[0]
+	# Todo Test in Linux environment
+	return
