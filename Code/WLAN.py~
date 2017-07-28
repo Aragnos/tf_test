@@ -10,7 +10,7 @@ def check_connection(host, count=4):
 	command = ["ping", "-c", count, host]
 	output = PyToSh.popen_comm(command)
 	# Todo more generic way?
-	if output.__contains__('not found') or output.__contains__('unknown'):
+	if output.__contains__('not found') or ouput.__contains__('unknown'):
 		raise InterfaceError('Host not found.')
 	# Todo check ping output
 	elif output.__contains__(''):
