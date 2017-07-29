@@ -46,7 +46,7 @@ def popen_pipe(command_one, command_two):
 	p2 = Popen(command_two, stdin=p1.stdout, stdout=PIPE)
 	p1.stdout.close()
 	output = p2.communicate()[0]
-	return
+	return output
 
 
 def check_type(command):
