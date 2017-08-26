@@ -2,6 +2,8 @@
 from ErrorClass import DatabaseError
 
 
+# TODO something left?
+
 def connect_database(host="localhost", port=3306, user="Red", passwd="red-brick42", db="tf"):
 	""" Tries to connect to the database.
 		Raises Connection Error """

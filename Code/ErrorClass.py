@@ -2,12 +2,14 @@
 	# Base Class for exceptions
 	pass
 
+# TODO: change self.msg to self.message and callers
+
 
 class DatabaseError(Error):
 	""" Raised if no connection to db possible """
 
 	def __init__(self, msg):
-		self.msg = msg
+		self.message = msg
 
 
 class LCDError(Error):
