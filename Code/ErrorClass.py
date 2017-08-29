@@ -16,21 +16,21 @@ class LCDError(Error):
 	""" Raised if LCD_Bricklet is not connected """
 
 	def __init__(self, msg):
-		self.msg = msg
+		self.message = msg
 
 
 class InterfaceError(Error):
 	""" Raised if the interface is not correctly configured """
 
 	def __init__(self, msg):
-		self.msg = msg
+		self.message = msg
 
 
 class ConnectionError(Error):
 	""" Raised if connection to host not possible"""
 
 	def __init__(self, msg):
-		self.msg = msg
+		self.message = msg
 
 
 class PopenFormatError(Error):
