@@ -10,6 +10,7 @@ user = "Red"
 passwd = "red-brick42"
 database = "tf"
 
+"""
 try:
 	conn = DB.connect_database(database_host, database_port, user, passwd, database)
 	# any sensor data in files? Yes: Save these to db. No: continue.
@@ -22,3 +23,9 @@ except ErrorClass.DatabaseError as e:
 	# save sensor data to file
 	sensor_file = open('Test.txt', 'a')
 	sensor_file.close()
+"""
+
+from TestProperties import Celsius
+
+c = Celsius(-200)
+print(c.temperature)

@@ -44,6 +44,10 @@ class ThermoCouple(Sensor):
 	def get_value(self):
 		return 1000
 
+"""Classes comparable to tinkerforge"""
+
+
+
 ambient = AmbientLight()
 barometer = Barometer()
 humidity = Humidity()

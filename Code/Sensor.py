@@ -16,46 +16,50 @@ set uid from config file
 # TODO set  uids?
 
 
-def connect_sensors():
-	global al
-	global barometer
-	global humidity
-	global lcd
-	global moisture
-	global temperature
-	global thermo
-
+def connect_sensors(sensors, uids, ipcon):
+	connected_sensors = []
 	if sensors["ambient_light"] == 1:
 		al = BrickletAmbientLightV2(UID_AMBIENT, ipcon)
+		connected_sensors.append(al)
 	if sensors["barometer"] == 1:
 		barometer = BrickletBarometer(UID_BAROMETER, ipcon)
+		connected_sensors.append(barometer)
 	if sensors["humidity"] == 1:
 		humidity = BrickletHumidity(UID_HUMIDITY, ipcon)
+		connected_sensors.append(humidity)
 	if sensors["lcd"] == 1:
 		lcd = BrickletLCD20x4(UID_LCD, ipcon)
+		connected_sensors.append(lcd)
 	if sensors["moisture"] == 1:
 		moisture = BrickletMoisture(UID_MOISTURE, ipcon)
+		connected_sensors.append(moisture)
 	if sensors["temperature"] == 1:
 		temperature = BrickletTemperature(UID_TEMPERATURE, ipcon)
+		connected_sensors.append(temperature)
 	if sensors["thermo_couple"] == 1:
 		thermo = BrickletThermocouple(UID_THERMO, ipcon)
-	return
+		connected_sensors.append(thermo)
+	return connected_sensors
 
 
-# global Data
-# bricklet objects
-# Attention: These are global variables and may not be set to the expected
-# connections but strings, so use them very carefully
-al = ""
-barometer = ""
-humidity = ""
-lcd = ""
-moisture = ""
-temperature = ""
-thermo = ""
+def get_value(sensor):
+	if isinstance(sensor, BrickletAmbientLightV2):
+		return sensor.get_illuminance()
+	if isinstance(sensor, BrickletBarometer):
+		# zweiter Barometer Wert
+		return sensor.get_air_pressure() / 1000.0
+	# altitude = barometer.get_altitude()
+	if isinstance(sensor, BrickletHumidity):
+		return sensor.get_humidity() / 10.0
+	if isinstance(sensor, BrickletMoisture):
+		return sensor.get_moisture_value()
+	if isinstance(sensor, BrickletTemperature) or isinstance(sensor, BrickletThermocouple):
+		return sensor.get_temperature() / 100.0
 
-# sensor with 1 are connected, with 0 not
-sensors = {
+
+if __name__ == "__main__":
+	# sensor with 1 are connected, with 0 not
+	sensors = {
 		"ambient_light": 1,
 		"barometer": 0,
 		"humidity": 0,
@@ -64,17 +68,17 @@ sensors = {
 		"temperature": 0,
 		"thermo_couple": 0}
 
-# bricklet UIDs
-UID_AMBIENT = "yBG"  # UID of Ambient Light Bricklet 2.0
-UID_BAROMETER = "ytN"  # UID for Barometer Bricklet
-UID_HUMIDITY = "Cd7"  # UID for Humidity Bricklet
-UID_LCD = "BFX"  # UID of LCD Display
-UID_MOISTURE = "zSG"  # UID for Moisture Bricklet
-UID_TEMPERATURE = "zbS"  # UID for Temperature Bricklet
-UID_THERMO = "B8k"  # UID for Thermocouple Bricklet
+	# bricklet UIDs
+	UID_AMBIENT = "yBG"  # UID of Ambient Light Bricklet 2.0
+	UID_BAROMETER = "ytN"  # UID for Barometer Bricklet
+	UID_HUMIDITY = "Cd7"  # UID for Humidity Bricklet
+	UID_LCD = "BFX"  # UID of LCD Display
+	UID_MOISTURE = "zSG"  # UID for Moisture Bricklet
+	UID_TEMPERATURE = "zbS"  # UID for Temperature Bricklet
+	UID_THERMO = "B8k"  # UID for Thermocouple Bricklet
 
-# dictionary with sensor UIDs
-sensor_uid = {
+	# dictionary with sensor UIDs
+	sensor_uid = {
 		"ambient_light": UID_AMBIENT,
 		"barometer": UID_BAROMETER,
 		"humidity": UID_HUMIDITY,
@@ -83,6 +87,9 @@ sensor_uid = {
 		"temperature": UID_TEMPERATURE,
 		"thermo_couple": UID_THERMO}
 
+	# Create IP connection
+	ipcon = IPConnection()
 
-# Create IP connection
-ipcon = IPConnection()
+	connected_sensors = connect_sensors(sensors, ipcon)
+	for sensor in connected_sensors:
+		print(get_value(sensor))
