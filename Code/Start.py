@@ -7,9 +7,11 @@ import LCD_Skript as LCD
 import time
 import datetime
 
-# todo: connect sensors, PyToSh: root password, SensorFactory, connect sensors, return sensor data, WLAN
+# todo: connect sensors, PyToSh: root password, WLAN
 # Todo: test all
+# todo: konfig file
 # todo opt: use config file, LCD Script
+
 
 
 database_host = "localhost"
