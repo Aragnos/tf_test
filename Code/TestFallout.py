@@ -25,7 +25,19 @@ except ErrorClass.DatabaseError as e:
 	sensor_file.close()
 """
 
-from TestProperties import Celsius
 
-c = Celsius(-200)
-print(c.temperature)
+def x():
+	print(5)
+
+
+def ambi():
+	print("ambi")
+
+
+c = {}
+c2 = {"func": x}
+c.update(c2)
+print(c)
+c.update({"al": ambi})
+print(c)
+c["al"]()
