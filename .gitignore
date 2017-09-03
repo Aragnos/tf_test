@@ -1,3 +1,4 @@
 tinkerforge/
 /Code/pymysql/
 .idea/
+/Code/pymysql/*.pyc
