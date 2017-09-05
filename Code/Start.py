@@ -18,6 +18,8 @@ user = config.DATABASE_USER
 password = config.DATABASE_PASSWORD
 database = config.DATABASE_NAME
 
+
+
 try:
 	conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
 	# any sensor data in files? Yes: Save these to db. No: continue.
