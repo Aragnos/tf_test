@@ -6,22 +6,20 @@ import ErrorClass
 import LCD_Skript as LCD
 import time
 import datetime
-
+import config
 # todo: connect sensors, PyToSh: root password, WLAN
 # Todo: test all
-# todo: konfig file
-# todo opt: use config file, LCD Script
+# todo opt: LCD Script
 
 
-
-database_host = "localhost"
-database_port = 3306
-user = "Red"
-passwd = "red-brick42"
-database = "tf"
+database_host = config.DATABASE_HOST
+database_port = config.DATABASE_PORT
+user = config.DATABASE_USER
+password = config.DATABASE_PASSWORD
+database = config.DATABASE_NAME
 
 try:
-	conn = DB.connect_database(database_host, database_port, user, passwd, database)
+	conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
 	# any sensor data in files? Yes: Save these to db. No: continue.
 	# save sensor data to database
 except ErrorClass.DatabaseError as e:
@@ -30,7 +28,7 @@ except ErrorClass.DatabaseError as e:
 
 # LCD.connect_lcd()
 
-
+"""
 sensor_file = open('Test.txt', 'a')
 for i in range(0, 10):
 	timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
@@ -39,3 +37,4 @@ for i in range(0, 10):
 	#print(write_str)
 	time.sleep(1)
 sensor_file.close()
+"""
