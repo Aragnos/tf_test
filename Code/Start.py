@@ -14,7 +14,46 @@ database_port = config.DATABASE_PORT
 user = config.DATABASE_USER
 password = config.DATABASE_PASSWORD
 database = config.DATABASE_NAME
+
+
+def build_dictionary():
+	# todo no need
+	"""Build sensor dictionary from bricklet UIDS"""
+	rel_sens = {}
+	if config.RELEVANT == '1':
+		if config.AMBIENT == 1:
+			rel_sens.update({"ambient_light": 1})
+		if config.BAROMETER == 1:
+			rel_sens.update({"barometer": 1})
+		if config.HUMIDITY == 1:
+			rel_sens.update({"humidity": 1})
+		if config.LCD == 1:
+			rel_sens.update({"lcd": 1})
+		if config.MOISTURE == 1:
+			rel_sens.update({"moisture": 1})
+		if config.TEMPERATURE == 1:
+			rel_sens.update({"temperature": 1})
+		if config.THERMOCOUPLE == 1:
+			rel_sens.update({"thermocouple": 1})
+		return rel_sens
+	else:
+		sensors = {
+			"ambient_light": 1,
+			"barometer": 1,
+			"humidity": 1,
+			"lcd": 1,
+			"moisture": 1,
+			"temperature": 1,
+			"thermocouple": 1}
+	return sensors
+
+
+# --------------------------------------------------
+# Main program procedure
+# --------------------------------------------------
+
 # Build dictionary from bricklet UIDS
+relevant_sensors = build_dictionary()
 
 
 # connect sensors

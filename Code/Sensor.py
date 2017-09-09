@@ -39,9 +39,9 @@ def connect_sensors(sensors, uids, ipcon):
 	if sensors["temperature"] == 1:
 		temperature = BrickletTemperature(uids["temperature"], ipcon)
 		con_sensors.update({"temperature": temperature})
-	if sensors["thermo_couple"] == 1:
-		thermo = BrickletThermocouple(uids["thermo_couple"], ipcon)
-		con_sensors.update({"thermo_couple": thermo})
+	if sensors["thermocouple"] == 1:
+		thermo = BrickletThermocouple(uids["thermocouple"], ipcon)
+		con_sensors.update({"thermocouple": thermo})
 	return con_sensors
 
 
@@ -61,6 +61,7 @@ def get_value(sensor):
 
 
 if __name__ == "__main__":
+	# todo delete
 	# sensor with 1 are connected, with 0 not
 	_sensors = {
 		"ambient_light": 1,
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 		"lcd": 0,
 		"moisture": 1,
 		"temperature": 1,
-		"thermo_couple": 1}
+		"thermocouple": 1}
 
 	# bricklet UIDs
 	UID_AMBIENT = "yBG"  # UID of Ambient Light Bricklet 2.0
@@ -88,7 +89,7 @@ if __name__ == "__main__":
 		"lcd": UID_LCD,
 		"moisture": UID_MOISTURE,
 		"temperature": UID_TEMPERATURE,
-		"thermo_couple": UID_THERMO}
+		"thermocouple": UID_THERMO}
 
 	# Create IP connection
 	_ipcon = IPConnection()

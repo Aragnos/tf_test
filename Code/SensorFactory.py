@@ -12,17 +12,16 @@ from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 
 
 class Sensor:
-#	__metaclass__ = ABCMeta
+# 	metaclass__ = ABCMeta
 	# Base class for sensors
 
-#	@abstractmethod
+# 	@abstractmethod
 	def get_value(self):
 		pass
 
 	"""Dummy method for returning values"""
 	def get_val(self, sensor):
 		if isinstance(sensor, BrickletAmbientLightV2):
-			print("checkpot")
 			return 100
 		if isinstance(sensor, BrickletBarometer):
 			# zweiter Barometer Wert
@@ -67,30 +66,3 @@ class Temperature(Sensor):
 class ThermoCouple(Sensor):
 	def get_value(self):
 		return 1000
-
-"""Classes comparable to tinkerforge"""
-
-
-"""
-ambient = AmbientLight()
-barometer = Barometer()
-humidity = Humidity()
-moisture = Moisture()
-temperature = Temperature()
-thermo = ThermoCouple()
-
-
-sensors = {
-		"ambient_light": ambient,
-		"barometer": barometer,
-		"humidity": humidity,
-		"moisture": moisture,
-		"temperature": temperature,
-		"thermo_couple": thermo}
-
-y = sensors["ambient_light"].get_value()
-print(y)
-
-for sensor in sensors:
-	print(sensors[sensor].get_value())
-"""
