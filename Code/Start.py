@@ -1,13 +1,10 @@
 ﻿import sys
-
-sys.path.append('../')
 import Datenbank as DB
 import ErrorClass
-import LCD_Skript as LCD
 import time
 import datetime
 import config
-# todo: connect sensors, PyToSh: root password, WLAN
+# todo: connect sensors, PyToSh: root password, WLAN,
 # Todo: test all
 # todo opt: LCD Script
 
@@ -18,8 +15,13 @@ user = config.DATABASE_USER
 password = config.DATABASE_PASSWORD
 database = config.DATABASE_NAME
 
-
-
+# connect sensors
+# WLAN available?
+# Loop forever
+# 	get sensor values
+# 	Try to connect to DB
+# 	Success: Save sensor values to DB, Failure: Save sensor values to SD Card
+# 	Sleep
 try:
 	conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
 	# any sensor data in files? Yes: Save these to db. No: continue.
