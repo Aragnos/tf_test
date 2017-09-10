@@ -7,7 +7,7 @@ from ErrorClass import InterfaceError, ConnectionError
 
 def check_connection(host, count=4):
 	""" If wlan interface is up, try to ping the host for count times """
-	command = ["ping", "-c", count, host]
+	command = ["ping", "-c", str(count), str(host)]
 	output = PyToSh.popen_comm(command)
 	# Todo more generic way?
 	if output.__contains__('not found') or output.__contains__('unknown'):

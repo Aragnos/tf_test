@@ -1,9 +1,9 @@
 ﻿from tinkerforge.ip_connection import IPConnection
+from datetime import datetime
 import sys
 import Datenbank as DB
 import ErrorClass as Error
 import time
-import datetime
 import config
 import Sensor
 import WLAN
@@ -89,42 +89,71 @@ connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipco
 # Loop forever
 while True:
 	# get sensor values
+	sensor_values = {}
+	for sensor in connected_sensors:
+		#new_value = Sensor.get_value(connected_sensors[sensor])
+		new_value = 0
+		sensor_values.update({sensor: new_value})
 	# WLAN configured # todo later
 	# WLAN available?
 	db_available = False
 	db_conn = []
+
 	try:
 		WLAN.check_interface()
+	except WindowsError:
+		print('Wrong system.')
 	except Error.InterfaceError:
 		WLAN.restart_interface(config.INTERFACE_NAME)
 		try:
 			WLAN.check_interface()
+		except WindowsError:
+			print('Wrong system.')
 		except Error.InterfaceError:
 			db_available = False
-	else:
+	finally:
 		# Try to ping database host
 		try:
 			WLAN.check_connection(database_host, 4)
-		except Error.InterfaceError or Error.ConnectionError:
+		except Error.InterfaceError:
+			db_available = False
+		except Error.ConnectionError:
 			db_available = False
 		else:
 			# Try to connect to database
 			try:
 				db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
-											  db=database)
+											db=database)
 			except Error.DatabaseError:
 				db_available = False
 			else:
 				db_available = True
 
+	# current time
+	timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
+	quit()
 	if db_available:
+		#
 		# Success: Save sensor values to DB
+		"""db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(get_value(sensor)) + "')"
+			cur.execute(db_statement)
+			conn.commit()
+		"""
 		pass
 	else:
 		# Failure: Save sensor values to SD Card
+		"""
+		ambient_file = open('Ambientlight.txt', 'a')
+		timestamp = "{:%Y/%m/%d %H:%M:%S}" % (local_time[0], local_time[1], local_time[2], local_time[3], local_time[4])
+		write_str = "%s\t%d\n" % (timestamp, illuminance)
+		ambient_file.write(write_str)
+		ambient_file.close()
+		"""
 		pass
 	# 	Sleep
-	pass
+	if db_conn == '[ ]':
+		# todo delete
+		break
 
 """
 try:

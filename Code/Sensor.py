@@ -94,10 +94,13 @@ if __name__ == "__main__":
 
 	attached_sensors = connect_sensors(_sensors, _sensor_uid, _ipcon)
 	fac_sen = SensorFactory.Sensor()
+	sensor_values = {}
 	for sen in attached_sensors:
 		try:
 			print(get_value(attached_sensors[sen]))
 		except IP_Error:
 			sensor_val = fac_sen.get_val(attached_sensors[sen])
-			output = "%s \t %s" % (sen, sensor_val)
-			print(output)
+			sensor_values.update({sen: sensor_val})
+	for value in sensor_values:
+		output = "%s \t %s" % (value, sensor_values[value])
+		print(output)
