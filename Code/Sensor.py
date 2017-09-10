@@ -8,14 +8,12 @@ from tinkerforge.bricklet_temperature import BrickletTemperature
 from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 from tinkerforge.ip_connection import Error as IP_Error
 import SensorFactory
-import sys
 """ Connect to sensors and get sensor data"""
 """ 
 use instance of (isinatance()) to get the corresponding sensor, so only one generic method is called from main program,
 set uid from config file
 """
 # TODO delete dependencies: Factory, sys, IP_Error?
-# TODO set uids?
 
 
 def connect_sensors(sensors, uids, ipcon):
