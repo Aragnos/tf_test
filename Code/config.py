@@ -4,6 +4,7 @@
 WLAN_CONFIGURED = '0'
 WLAN_USER = ""
 WLAN_PASSWORD = ""
+INTERFACE_NAME = "wlan0"
 # --------------------------------------------------
 # Database Settings
 # --------------------------------------------------

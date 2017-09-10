@@ -1,11 +1,13 @@
 ﻿from tinkerforge.ip_connection import IPConnection
 import sys
 import Datenbank as DB
-import ErrorClass
+import ErrorClass as Error
 import time
 import datetime
 import config
 import Sensor
+import WLAN
+
 # todo: connect sensors, PyToSh: root password, WLAN,
 # Todo: test all
 # todo opt: LCD Script
@@ -80,20 +82,49 @@ def build_dictionaries():
 ipcon = IPConnection()
 # connect sensors
 connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
-#quit()
+# quit()
 
 # LCD connected?
 # 	Success: Wait for user input, Failure: continue
 # Loop forever
 while True:
-	# WLAN configured
+	# get sensor values
+	# WLAN configured # todo later
 	# WLAN available?
-	# 	get sensor values
-	# 	Try to connect to DB
-	# 		Success: Save sensor values to DB, Failure: Save sensor values to SD Card
+	db_available = False
+	db_conn = []
+	try:
+		WLAN.check_interface()
+	except Error.InterfaceError:
+		WLAN.restart_interface(config.INTERFACE_NAME)
+		try:
+			WLAN.check_interface()
+		except Error.InterfaceError:
+			db_available = False
+	else:
+		# Try to ping database host
+		try:
+			WLAN.check_connection(database_host, 4)
+		except Error.InterfaceError or Error.ConnectionError:
+			db_available = False
+		else:
+			# Try to connect to database
+			try:
+				db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
+											  db=database)
+			except Error.DatabaseError:
+				db_available = False
+			else:
+				db_available = True
+
+	if db_available:
+		# Success: Save sensor values to DB
+		pass
+	else:
+		# Failure: Save sensor values to SD Card
+		pass
 	# 	Sleep
 	pass
-
 
 """
 try:
