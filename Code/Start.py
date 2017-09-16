@@ -1,4 +1,6 @@
-﻿from tinkerforge.ip_connection import IPConnection
+﻿from distutils.command.check import check
+
+from tinkerforge.ip_connection import IPConnection
 from datetime import datetime
 import sys
 import Datenbank as DB
@@ -7,6 +9,8 @@ import time
 import config
 import Sensor
 import WLAN
+from tinkerforge.ip_connection import Error as IP_Error
+import SensorFactory
 
 # todo: connect sensors, PyToSh: root password, WLAN,
 # Todo: test all
@@ -72,107 +76,114 @@ def build_dictionaries():
 	return [rel_sensors, rel_uids]
 
 
+def check_and_connect_database():
+	db_conn = []
+	try:
+		db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
+									db=database)
+	except Error.DatabaseError:
+		# db not available. If WLAN should be configured, try to get it back up
+		if config.WLAN_CONFIGURED == '1':
+			try:
+				WLAN.check_interface()
+			except WindowsError:
+				print('Wrong system.')
+			except Error.InterfaceError:
+				# try to restart WLAN three times
+				for x in range(0, 3):
+					WLAN.restart_interface(config.INTERFACE_NAME)
+					try:
+						WLAN.check_interface()
+					except WindowsError:
+						print('Wrong system.')
+					except Error.InterfaceError:
+						pass
+					else:
+						# WLAN is back up -> one more try to connect to database
+						db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
+													db=database)
+	return db_conn
+
+
 # --------------------------------------------------
 # Main program procedure
 # --------------------------------------------------
 
-# Build dictionary from bricklet UIDS
-[relevant_sensors, relevant_uids] = build_dictionaries()
-# connect to daemon via ipconnection
-ipcon = IPConnection()
-# connect sensors
-connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
-# quit()
+if __name__ == "__main__":
+	# Build dictionary from bricklet UIDS
+	[relevant_sensors, relevant_uids] = build_dictionaries()
+	# connect to daemon via ipconnection
+	ipcon = IPConnection()
+	# connect sensors
+	connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
+	# quit()
 
-# LCD connected?
-# 	Success: Wait for user input, Failure: continue
-# Loop forever
-while True:
-	# get sensor values
-	sensor_values = {}
-	for sensor in connected_sensors:
-		#new_value = Sensor.get_value(connected_sensors[sensor])
-		new_value = 0
-		sensor_values.update({sensor: new_value})
-	# WLAN configured # todo later
-	# WLAN available?
-	db_available = False
-	db_conn = []
-
-	try:
-		WLAN.check_interface()
-	except WindowsError:
-		print('Wrong system.')
-	except Error.InterfaceError:
-		WLAN.restart_interface(config.INTERFACE_NAME)
-		try:
-			WLAN.check_interface()
-		except WindowsError:
-			print('Wrong system.')
-		except Error.InterfaceError:
-			db_available = False
-	finally:
-		# Try to ping database host
-		try:
-			WLAN.check_connection(database_host, 4)
-		except Error.InterfaceError:
-			db_available = False
-		except Error.ConnectionError:
-			db_available = False
-		else:
-			# Try to connect to database
+	# LCD connected?
+	# 	Success: Wait for user input, Failure: continue
+	# Loop forever
+	while True:
+		# get sensor values
+		sensor_values = {}
+		fac_sen = SensorFactory.Sensor()  # todo delete fac_sen
+		for sensor in connected_sensors:
 			try:
-				db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
-											db=database)
-			except Error.DatabaseError:
-				db_available = False
-			else:
-				db_available = True
-
-	# current time
-	timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
-	quit()
-	if db_available:
-		#
-		# Success: Save sensor values to DB
-		"""db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(get_value(sensor)) + "')"
-			cur.execute(db_statement)
-			conn.commit()
-		"""
-		pass
-	else:
-		# Failure: Save sensor values to SD Card
-		"""
-		ambient_file = open('Ambientlight.txt', 'a')
-		timestamp = "{:%Y/%m/%d %H:%M:%S}" % (local_time[0], local_time[1], local_time[2], local_time[3], local_time[4])
-		write_str = "%s\t%d\n" % (timestamp, illuminance)
-		ambient_file.write(write_str)
-		ambient_file.close()
-		"""
-		pass
-	# 	Sleep
-	if db_conn == '[ ]':
-		# todo delete
+				# todo for test reasons use try structure
+				new_value = Sensor.get_value(connected_sensors[sensor])
+				new_value = 0
+				sensor_values.update({sensor: new_value})
+			except IP_Error:
+				sensor_val = fac_sen.get_val(connected_sensors[sensor])
+				sensor_values.update({sensor: sensor_val})
+		# WLAN configured # todo later, use master/red brick for wlan?
+		# Connection to database possible
+		db_connection = check_and_connect_database()
+		# current time
+		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
+		# Evaluates to True, if db_connection is not empty
+		for value in sensor_values:
+			output = "%s \t %d\n" % (value, sensor_values[value])
+			print(output)
+		if db_connection:
+			#
+			# Success:
+			# Sensor values  written in files on SD?
+			# Save sensor values to DB
+			"""db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(get_value(sensor)) + "')"
+				cur.execute(db_statement)
+				conn.commit()
+			"""
+			pass
+		else:
+			# Failure: Save sensor values to SD Card
+			"""
+			ambient_file = open('Ambientlight.txt', 'a')
+			timestamp = "{:%Y/%m/%d %H:%M:%S}" % (local_time[0], local_time[1], local_time[2], local_time[3], local_time[4])
+			write_str = "%s\t%d\n" % (timestamp, illuminance)
+			ambient_file.write(write_str)
+			ambient_file.close()
+			"""
+			pass
+		# 	Sleep
 		break
 
-"""
-try:
-	conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
-	# any sensor data in files? Yes: Save these to db. No: continue.
-	# save sensor data to database
-except ErrorClass.DatabaseError as e:
-	print(e.message)
-	# save sensor data to file
-
-# LCD.connect_lcd()
-
-
-sensor_file = open('Test.txt', 'a')
-for i in range(0, 10):
-	timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
-	write_str = "%s \t %d\n" % (timestamp, i)
-	sensor_file.write(write_str)
-	#print(write_str)
-	time.sleep(1)
-sensor_file.close()
-"""
+	"""
+	try:
+		conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
+		# any sensor data in files? Yes: Save these to db. No: continue.
+		# save sensor data to database
+	except ErrorClass.DatabaseError as e:
+		print(e.message)
+		# save sensor data to file
+	
+	# LCD.connect_lcd()
+	
+	
+	sensor_file = open('Test.txt', 'a')
+	for i in range(0, 10):
+		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
+		write_str = "%s \t %d\n" % (timestamp, i)
+		sensor_file.write(write_str)
+		#print(write_str)
+		time.sleep(1)
+	sensor_file.close()
+	"""

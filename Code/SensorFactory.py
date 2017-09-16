@@ -12,6 +12,9 @@ from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 
 
 class Sensor:
+
+	def __init__(self):
+		pass
 # 	metaclass__ = ABCMeta
 	# Base class for sensors
 
@@ -24,7 +27,7 @@ class Sensor:
 		if isinstance(sensor, BrickletAmbientLightV2):
 			return 100
 		if isinstance(sensor, BrickletBarometer):
-			# zweiter Barometer Wert
+			# second barometer value
 			return 200
 		# altitude = barometer.get_altitude()
 		if isinstance(sensor, BrickletHumidity):
@@ -63,6 +66,6 @@ class Temperature(Sensor):
 		return 400
 
 
-class ThermoCouple(Sensor):
+class Thermocouple(Sensor):
 	def get_value(self):
 		return 1000
