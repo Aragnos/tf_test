@@ -11,11 +11,12 @@ import Sensor
 import WLAN
 from tinkerforge.ip_connection import Error as IP_Error
 import SensorFactory
+import FileConnector
 
 # todo: connect sensors, PyToSh: root password, WLAN,
 # Todo: test all
 # todo opt: LCD Script
-
+# todo change hardcoded strings to variables
 # Database stuff
 database_host = config.DATABASE_HOST
 database_port = config.DATABASE_PORT
@@ -105,6 +106,19 @@ def check_and_connect_database():
 	return db_conn
 
 
+def save_sd(sen_val, con_sensors, timestamp):
+	"""Saves sensor values to sd card"""
+	opened_files = FileConnector.open_files(con_sensors)
+	FileConnector.write_files(sen_val, opened_files, timestamp)
+	FileConnector.close_files(opened_files)
+	return
+	
+
+def save_db()
+	"""Save sensor values to database"""
+	pass
+	
+	
 # --------------------------------------------------
 # Main program procedure
 # --------------------------------------------------
@@ -139,10 +153,12 @@ if __name__ == "__main__":
 		db_connection = check_and_connect_database()
 		# current time
 		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
-		# Evaluates to True, if db_connection is not empty
+		
+		# todo: delete, test purpose
 		for value in sensor_values:
 			output = "%s \t %d\n" % (value, sensor_values[value])
 			print(output)
+		# Evaluates to True, if db_connection is not empty
 		if db_connection:
 			#
 			# Success:
@@ -155,15 +171,9 @@ if __name__ == "__main__":
 			pass
 		else:
 			# Failure: Save sensor values to SD Card
-			"""
-			ambient_file = open('Ambientlight.txt', 'a')
-			timestamp = "{:%Y/%m/%d %H:%M:%S}" % (local_time[0], local_time[1], local_time[2], local_time[3], local_time[4])
-			write_str = "%s\t%d\n" % (timestamp, illuminance)
-			ambient_file.write(write_str)
-			ambient_file.close()
-			"""
-			pass
-		# 	Sleep
+			save_sd(sensor_values, connected_sensors, timestamp)
+		# Sleep
+		time.sleep(10)
 		break
 
 	"""

@@ -56,6 +56,7 @@ def get_value(sensor):
 		return sensor.get_moisture_value()
 	if isinstance(sensor, BrickletTemperature) or isinstance(sensor, BrickletThermocouple):
 		return sensor.get_temperature() / 100.0
+	return
 
 
 if __name__ == "__main__":
@@ -104,3 +105,4 @@ if __name__ == "__main__":
 	for value in sensor_values:
 		output = "%s \t %s" % (value, sensor_values[value])
 		print(output)
+		
