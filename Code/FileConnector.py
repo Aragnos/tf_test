@@ -60,3 +60,15 @@ def write_files(sensor_values, opened_files, timestamp):
 		except:
 			continue
 	return
+
+
+def check_and_return(file_name):
+	"""Checks if a file is present and returns its lines"""
+	values = []
+	try:
+		opened_file = open(file_name, 'r')
+		for line in opened_file:
+			values.append(line)
+	except IOError:
+		pass
+	return values
