@@ -106,16 +106,22 @@ def check_and_connect_database():
 	return db_conn
 
 
-def save_sd(sen_val, con_sensors, timestamp):
+def save_sd():
 	"""Saves sensor values to sd card"""
-	opened_files = FileConnector.open_files(con_sensors)
-	FileConnector.write_files(sen_val, opened_files, timestamp)
+	opened_files = FileConnector.open_files(connected_sensors)
+	FileConnector.write_files(sensor_values, opened_files, timestamp)
 	FileConnector.close_files(opened_files)
 	return
 	
 
 def save_db():
 	"""Save sensor values to database"""
+	for sensor in sensor_values:
+		# Write data to database
+		db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(sensor_values[sensor]) + "')"
+		cursor.execute(db_statement)
+	# Commit changes onto the database
+	db_connection.commit()
 	pass
 	
 	
@@ -164,6 +170,8 @@ if __name__ == "__main__":
 			# Success:
 			# Sensor values  written in files on SD?
 			# Save sensor values to DB
+			cursor = db_connection.cursor()
+			save_db()
 			"""db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(get_value(sensor)) + "')"
 				cur.execute(db_statement)
 				conn.commit()

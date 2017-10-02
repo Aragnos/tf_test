@@ -15,37 +15,38 @@ sensor_file = open('Test.txt', 'a')
 
 
 def open_files(connected_sensors):
-	"""Open files on SD for the connected sensors and return file handles"""
-	# Dictionary with all connected sensors
-	open_files = {}
-	if sensors["ambient_light"] == 1:
+	"""Open files on SD for the connected connected_sensors and return file handles"""
+	# Dictionary with all connected connected_sensors
+	opened_files = {}
+	if connected_sensors["ambient_light"] == 1:
 		al = open('Ambientight.txt', 'a')
-		open_files.update({"ambient_light": al})
-	if sensors["barometer"] == 1:
+		opened_files.update({"ambient_light": al})
+	if connected_sensors["barometer"] == 1:
 		barometer = open('Barometer.txt', 'a')
-		open_files.update({"barometer": barometer})
-	if sensors["humidity"] == 1:
+		opened_files.update({"barometer": barometer})
+	if connected_sensors["humidity"] == 1:
 		humidity = open('Humidity.txt', 'a')
-		open_files.update({"humidity": humidity})
-	if sensors["lcd"] == 1:
-		#lcd = BrickletLCD20x4(uids["lcd"], ipcon)
-		#open_files.update({"lcd": lcd})
-	if sensors["moisture"] == 1:
+		opened_files.update({"humidity": humidity})
+	if connected_sensors["lcd"] == 1:
+		# lcd = BrickletLCD20x4(uids["lcd"], ipcon)
+		# open_files.update({"lcd": lcd})
+		pass
+	if connected_sensors["moisture"] == 1:
 		moisture = open('Moisture.txt', 'a')
-		open_files.update({"moisture": moisture})
-	if sensors["temperature"] == 1:
+		opened_files.update({"moisture": moisture})
+	if connected_sensors["temperature"] == 1:
 		temperature = open('Temperature.txt', 'a')
-		open_files.update({"temperature": temperature})
-	if sensors["thermocouple"] == 1:
+		opened_files.update({"temperature": temperature})
+	if connected_sensors["thermocouple"] == 1:
 		thermo = open('Thermocouple.txt', 'a')
-		open_files.update({"thermocouple": thermo})
-	return open_files
+		opened_files.update({"thermocouple": thermo})
+	return opened_files
 
 
 def close_files(opened_files):
 	"""Close all given files"""
-	for file in opened_files:
-		file.close()
+	for f in opened_files:
+		f.close()
 	return
 
 
