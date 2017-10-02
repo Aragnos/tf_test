@@ -114,7 +114,7 @@ def save_sd(sen_val, con_sensors, timestamp):
 	return
 	
 
-def save_db()
+def save_db():
 	"""Save sensor values to database"""
 	pass
 	
