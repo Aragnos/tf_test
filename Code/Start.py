@@ -93,7 +93,7 @@ def check_and_connect_database():
 				# try to restart WLAN three times
 				for x in range(0, 3):
 					WLAN.restart_interface(config.INTERFACE_NAME)
-					try:
+					tryA
 						WLAN.check_interface()
 					except WindowsError:
 						print('Wrong system.')
@@ -118,7 +118,10 @@ def save_db()
 	"""Save sensor values to database"""
 	pass
 	
-	
+
+def save_sd_to_db():
+	"""Save temporary on sd saved files to database"""
+	pass
 # --------------------------------------------------
 # Main program procedure
 # --------------------------------------------------
