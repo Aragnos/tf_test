@@ -106,22 +106,33 @@ def check_and_connect_database():
 	return db_conn
 
 
-def save_sd(sen_val, con_sensors, timestamp):
+def save_sd():
 	"""Saves sensor values to sd card"""
-	opened_files = FileConnector.open_files(con_sensors)
-	FileConnector.write_files(sen_val, opened_files, timestamp)
+	opened_files = FileConnector.open_files(connected_sensors)
+	FileConnector.write_files(sensor_values, opened_files, timestamp)
 	FileConnector.close_files(opened_files)
 	return
 	
 
-def save_db()
+def save_db(sen_values, timestamp):
 	"""Save sensor values to database"""
 	pass
 	
 
 def save_sd_to_db():
-	"""Save temporary on sd saved files to database"""
-	pass
+	"""Save temporary value from SD to database"""
+	for sensor in connected_sensors:
+		# Get values saved on sd
+		values = FileConnector.check_and_return(sensor)
+		for value in values:
+			# timestamp on 0, sensor value on 1
+			splitted_value = value.split('\t')
+			tmp_dic = {sensor: splitted_value[1]}
+			# save values to database
+			save_db(tmp_dic, splitted_value[0])
+	return
+
+	
 # --------------------------------------------------
 # Main program procedure
 # --------------------------------------------------
@@ -167,11 +178,9 @@ if __name__ == "__main__":
 			# Success:
 			# Sensor values  written in files on SD?
 			# Save sensor values to DB
-			"""db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(get_value(sensor)) + "')"
-				cur.execute(db_statement)
-				conn.commit()
-			"""
-			pass
+			cursor = db_connection.cursor()
+			save_sd_to_db()
+			save_db(sensor_values, timestamp)
 		else:
 			# Failure: Save sensor values to SD Card
 			save_sd(sensor_values, connected_sensors, timestamp)
