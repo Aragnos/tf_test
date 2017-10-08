@@ -7,14 +7,16 @@ from ErrorClass import InterfaceError, ConnectionError
 
 def check_connection(host, count=4):
 	""" If wlan interface is up, try to ping the host for count times """
-	command = ["ping", "-c", str(count), str(host)]
+	#command = ["ping", "-c", str(count), str(host)]
+	command = ["ping", str(host)]
 	output = PyToSh.popen_comm(command)
 	# Todo more generic way?
 	if output.__contains__('not found') or output.__contains__('unknown'):
 		raise InterfaceError('Host not found.')
 	# Todo check ping output
-	elif output.__contains__(''):
+	elif output.__contains__('nicht finden'):
 		raise ConnectionError('Destination host not reachable.')
+	print(output)
 	return
 
 
