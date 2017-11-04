@@ -2,6 +2,8 @@
 from subprocess import Popen, PIPE
 from ErrorClass import PopenFormatError
 import types
+import config
+
 
 
 def popen_comm(command):
@@ -49,6 +51,18 @@ def popen_pipe(command_one, command_two):
 	return output
 
 
+def sudo_popen_pipe(command_one, command_two):
+	""" Popen with pipelining and sudo"""
+	pwd = config.ROOT_PASSWORD+"\n"
+	# echos password to sudo
+	echo_cmd = ["echo", pwd]
+	sudo_cmd = ["sudo", "-S", "echo", "Root"]
+	# Sudo acquired, process initial commands
+	popen_pipe(echo_cmd, sudo_cmd)
+	popen_pipe(command_one, command_two)
+	return
+
+
 def check_type(command):
 	if isinstance(command, types.ListType):
 		return
@@ -58,7 +72,7 @@ def check_type(command):
 
 def change_premissions(password):
 	""" Changes the permissions so sudo can be used without password """
-	# Todo required?
+	# Todo required? No
 	command = ['sudo', 'visudo']
 	add = 'tf ALL=(ALL) NOPASSWD: ALL'
 	p = Popen(command, stdout=PIPE, stdin=PIPE)

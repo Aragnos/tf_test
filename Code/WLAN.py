@@ -7,8 +7,8 @@ from ErrorClass import InterfaceError, ConnectionError
 
 def check_connection(host, count=4):
 	""" If wlan interface is up, try to ping the host for count times """
-	#command = ["ping", "-c", str(count), str(host)]
-	command = ["ping", str(host)]
+	command = ["ping", "-c", str(count), str(host)]
+	#command = ["ping", str(host)]
 	output = PyToSh.popen_comm(command)
 	# Todo more generic way?
 	if output.__contains__('not found') or output.__contains__('unknown'):
@@ -71,7 +71,7 @@ ap_scan=1\n\n'''
 	supplicant_file = '/etc/wpa_supplicant/wpa_supplicant.conf'
 	cmd_one = ['echo', complete_config]
 	cmd_two = ['sudo', 'tee', supplicant_file]
-	PyToSh.popen_pipe(cmd_one, cmd_two)
+	PyToSh.sudo_popen_pipe(cmd_one, cmd_two)
 	return
 
 
@@ -84,6 +84,6 @@ def interfaces(iface_name):
 	interfaces_file = '/etc/network/interfaces'
 	cmd_one = ['echo', config_string]
 	cmd_two = ['sudo', 'tee', '-a', interfaces_file]
-	PyToSh.popen_pipe(cmd_one, cmd_two)
+	PyToSh.sudo_popen_pipe(cmd_one, cmd_two)
 	return
 
