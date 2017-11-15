@@ -13,7 +13,7 @@ from tinkerforge.ip_connection import Error as IP_Error
 import SensorFactory
 import FileConnector
 
-# todo: connect sensors, PyToSh: root password, WLAN,
+# todo: WLAN,
 # Todo: test all
 # todo opt: LCD Script
 # todo change hardcoded strings to variables
@@ -114,12 +114,13 @@ def save_sd():
 	return
 	
 
-def save_db(sen_values, timestamp):
+def save_db(sen_values, time):
 	"""Save sensor values to database"""
 	for sensor in sen_values:
+		if sensor == 'lcd':
+			continue
 		# Write data to database
-		# todo timestamp missing
-		db_statement = "INSERT INTO `" + sensor + "` (`wert`) VALUES ('" + str(sen_values[sensor]) + "')"
+		db_statement = "INSERT INTO `" + sensor + "` (`datum`, `wert`) VALUES ('" + time + "', '" + str(sen_values[sensor]) + "')"
 		cursor.execute(db_statement)
 	# Commit changes onto the database
 	db_connection.commit()
@@ -159,26 +160,20 @@ if __name__ == "__main__":
 	while True:
 		# get sensor values
 		sensor_values = {}
-		fac_sen = SensorFactory.Sensor()  # todo delete fac_sen
 		for sensor in connected_sensors:
 			try:
 				# todo for test reasons use try structure
 				new_value = Sensor.get_value(connected_sensors[sensor])
 				new_value = 0
 				sensor_values.update({sensor: new_value})
-			except IP_Error:
-				sensor_val = fac_sen.get_val(connected_sensors[sensor])
-				sensor_values.update({sensor: sensor_val})
+			except:
+				pass
 		# WLAN configured # todo later, use master/red brick for wlan?
 		# Connection to database possible
 		db_connection = check_and_connect_database()
 		# current time
 		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
-		
-		# todo: delete, test purpose
-		for value in sensor_values:
-			output = "%s \t %d\n" % (value, sensor_values[value])
-			print(output)
+
 		# Evaluates to True, if db_connection is not empty
 		if db_connection:
 			#
@@ -190,7 +185,7 @@ if __name__ == "__main__":
 			save_db(sensor_values, timestamp)
 		else:
 			# Failure: Save sensor values to SD Card
-			save_sd(sensor_values, connected_sensors, timestamp)
+			save_sd()
 		# Sleep
 		time.sleep(10)
 		break
