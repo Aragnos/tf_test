@@ -38,6 +38,25 @@ def build_dictionaries():
 # Main program procedure
 # --------------------------------------------------
 
+def print_verbrauch(info):
+	# Spannung in mv
+	#voltage = str(master_1.get_stack_voltage())
+	# Verbrauch in ma
+	#current = str(master_1.get_stack_current())
+
+	# todo
+	voltage = 10
+	current = 10
+	out_str = 'Master_1\n{}\nSpannung:\t{}\tVerbrauch:\t{}'.format(info, voltage, current)
+	print(out_str)
+	# Spannung in mv
+	#voltage = str(master_2.get_stack_voltage())
+	# Verbrauch in ma
+	#current = str(master_2.get_stack_current())
+	out_str = 'Master_2\n{}\nSpannung:\t{}\tVerbrauch:\t{}'.format(info, voltage, current)
+	print(out_str)
+
+
 if __name__ == "__main__":
 	# Build dictionary from bricklet UIDS
 	[relevant_sensors, relevant_uids] = build_dictionaries()
@@ -51,25 +70,24 @@ if __name__ == "__main__":
 
 	ipcon.connect('localhost', 4223)
 	# Stromverbrauch vor allen Sensoren
-	# Spannung in mv
-	voltage = str(master_1.get_stack_voltage())
-	# Verbrauch in ma
-	current = str(master_1.get_stack_current())
-
-	out_str = 'Master\nSpannung:\t%d\tVerbrauch:\t%d'.format(voltage, current)
-	print(out_str)
+	print_verbrauch('Master alleine')
 	# connect rest of sensors
+	ipcon.disconnect()
 	connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
+	ipcon.connect('localhost', 4223)
+	# Stromverbrauch mit allen Sensoren
+	print_verbrauch('Alle Sensoren')
 	while True:
 		# get sensor values
 		sensor_values = {}
 		for sensor in connected_sensors:
 			try:
 				new_value = Sensor.get_value(connected_sensors[sensor])
+				print_verbrauch('Wert geholt von {}'.format(sensor))
 				new_value = 0
 				sensor_values.update({sensor: new_value})
 			except:
 				pass
-		time.sleep(10)
+		time.sleep(60)
 		break
 
