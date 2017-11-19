@@ -27,7 +27,8 @@ if __name__ == '__main__':
 		try:
 			WLAN.check_interface()
 			WLAN.check_connection('google.de')
-		except:
+		except Exception as e:
+			print(e)
 			wlan_status = '-'
 		try_file = open('TryRun.txt', 'a')
 		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())

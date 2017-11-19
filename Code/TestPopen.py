@@ -11,7 +11,8 @@ def test():
             print(output)
         else:
             raise
-    except:
+    except Exception as e:
+        print(e)
         raise ConnectionError("Ping failed")
     return
 

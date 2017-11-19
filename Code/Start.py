@@ -133,7 +133,8 @@ def save_sd_to_db():
 	open_files = []
 	try:
 		open_files = FileConnector.open_files(connected_sensors, 'r')
-	except:
+	except Exception as e:
+		print(e)
 		pass
 	for f in open_files:
 		values = FileConnector.check_and_return(open_files[f])
@@ -174,7 +175,8 @@ if __name__ == "__main__":
 				# todo for test reasons use try structure
 				new_value = Sensor.get_value(connected_sensors[sensor])
 				sensor_values.update({sensor: new_value})
-			except:
+			except Exception as e:
+				print(e)
 				pass
 		# WLAN configured # todo later, use master/red brick for wlan?
 		# Connection to database possible

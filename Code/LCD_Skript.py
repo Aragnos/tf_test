@@ -38,7 +38,8 @@ def check_lcd_connection():
 	""" If LCD is not connected, an exception will be thrown"""
 	try:
 		lcd.is_backlight_on()
-	except:
+	except Exception as e:
+		print(e)
 		raise LCDError("LCD not reachable.")
 
 

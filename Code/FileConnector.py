@@ -57,7 +57,8 @@ def write_files(sensor_values, opened_files, timestamp):
 			value = sensor_values[sensor]
 			write_str = "%s \t %d\n" % (timestamp, value)
 			opened_files[sensor].write(write_str)
-		except:
+		except Exception as e:
+			print(e)
 			continue
 	return
 
