@@ -108,7 +108,7 @@ def check_and_connect_database():
 
 def save_sd():
 	"""Saves sensor values to sd card"""
-	opened_files = FileConnector.open_files(connected_sensors)
+	opened_files = FileConnector.open_files(connected_sensors, 'a')
 	FileConnector.write_files(sensor_values, opened_files, timestamp)
 	FileConnector.close_files(opened_files)
 	return
@@ -123,21 +123,29 @@ def save_db(sen_values, time):
 		db_statement = "INSERT INTO `" + sensor + "` (`datum`, `wert`) VALUES ('" + time + "', '" + str(sen_values[sensor]) + "')"
 		cursor.execute(db_statement)
 	# Commit changes onto the database
-	db_connection.commit()
+	connection.commit()
 	return
 	
 
 def save_sd_to_db():
 	"""Save temporary value from SD to database"""
-	for sensor in connected_sensors:
-		# Get values saved on sd
-		values = FileConnector.check_and_return(sensor)
+	# Get values saved on sd
+	open_files = []
+	try:
+		open_files = FileConnector.open_files(connected_sensors, 'r')
+	except:
+		pass
+	for f in open_files:
+		values = FileConnector.check_and_return(open_files[f])
+		print(len(values))
 		for value in values:
 			# timestamp on 0, sensor value on 1
 			splitted_value = value.split('\t')
-			tmp_dic = {sensor: splitted_value[1]}
+			tmp_dic = {f: splitted_value[1]}
 			# save values to database
 			save_db(tmp_dic, splitted_value[0])
+	FileConnector.close_files(open_files)
+	FileConnector.delete_files()
 	return
 
 	
@@ -155,6 +163,7 @@ if __name__ == "__main__":
 	# quit()
 
 	# LCD connected?
+	ipcon.connect('localhost', 4223)
 	# 	Success: Wait for user input, Failure: continue
 	# Loop forever
 	while True:
@@ -164,13 +173,14 @@ if __name__ == "__main__":
 			try:
 				# todo for test reasons use try structure
 				new_value = Sensor.get_value(connected_sensors[sensor])
-				new_value = 0
 				sensor_values.update({sensor: new_value})
 			except:
 				pass
 		# WLAN configured # todo later, use master/red brick for wlan?
 		# Connection to database possible
 		db_connection = check_and_connect_database()
+		connection = db_connection[0]
+		cursor = db_connection[1]
 		# current time
 		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
 
@@ -188,26 +198,3 @@ if __name__ == "__main__":
 			save_sd()
 		# Sleep
 		time.sleep(10)
-		break
-
-	"""
-	try:
-		conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password, db=database)
-		# any sensor data in files? Yes: Save these to db. No: continue.
-		# save sensor data to database
-	except ErrorClass.DatabaseError as e:
-		print(e.message)
-		# save sensor data to file
-	
-	# LCD.connect_lcd()
-	
-	
-	sensor_file = open('Test.txt', 'a')
-	for i in range(0, 10):
-		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
-		write_str = "%s \t %d\n" % (timestamp, i)
-		sensor_file.write(write_str)
-		#print(write_str)
-		time.sleep(1)
-	sensor_file.close()
-	"""

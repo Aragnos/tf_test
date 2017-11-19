@@ -39,20 +39,19 @@ def build_dictionaries():
 # --------------------------------------------------
 
 def print_verbrauch(info):
+	# master 1
 	# Spannung in mv
-	#voltage = str(master_1.get_stack_voltage())
+	voltage = str(master_1.get_stack_voltage())
 	# Verbrauch in ma
-	#current = str(master_1.get_stack_current())
-
-	# todo
-	voltage = 10
-	current = 10
+	current = str(master_1.get_stack_current())
 	out_str = 'Master_1\n{}\nSpannung:\t{}\tVerbrauch:\t{}'.format(info, voltage, current)
 	print(out_str)
+
+	# master 2
 	# Spannung in mv
-	#voltage = str(master_2.get_stack_voltage())
+	voltage = str(master_2.get_stack_voltage())
 	# Verbrauch in ma
-	#current = str(master_2.get_stack_current())
+	current = str(master_2.get_stack_current())
 	out_str = 'Master_2\n{}\nSpannung:\t{}\tVerbrauch:\t{}'.format(info, voltage, current)
 	print(out_str)
 
@@ -86,7 +85,8 @@ if __name__ == "__main__":
 				print_verbrauch('Wert geholt von {}'.format(sensor))
 				new_value = 0
 				sensor_values.update({sensor: new_value})
-			except:
+			except Exception as e:
+				print(e)
 				pass
 		time.sleep(60)
 		break
