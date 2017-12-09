@@ -1,57 +1,46 @@
 """Opens, closes and writes to file"""
 import PyToSh
-# todo all
-#todo two files for barometer
-'''
-sensor_file = open('Test.txt', 'a')
-	for i in range(0, 10):
-		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
-		write_str = "%s \t %d\n" % (timestamp, i)
-		sensor_file.write(write_str)
-		#print(write_str)
-		time.sleep(1)
-	sensor_file.close()
-'''
+# todo test all
 
 
-def open_files(connected_sensors, use):
-	"""Open files on SD for the connected connected_sensors and return file handles"""
-	# Dictionary with all connected connected_sensors
+def open_files(file_list, path, use):
+	"""
+	Open all files given in file list and returns the opened file handlers
+	:param file_list: files, which should be opened, as list
+	:param path: path to the file location, as string
+	:param use: 'a' for appending, 'r' for reading a file, as string
+	:return: file handlers to the opened files, as dictionary
+	"""
+	# Dictionary with all opened files
 	opened_files = {}
-	if connected_sensors["ambient_light"] is not None:
-		al = open('Werte/Ambientlight.txt', use)
-		opened_files.update({"ambient_light": al})
-	if connected_sensors["barometer"] is not None:
-		barometer = open('Werte/Barometer.txt', use)
-		opened_files.update({"barometer": barometer})
-	if connected_sensors["humidity"] is not None:
-		humidity = open('Werte/Humidity.txt', use)
-		opened_files.update({"humidity": humidity})
-	if connected_sensors["lcd"] == 1:
-		# lcd = BrickletLCD20x4(uids["lcd"], ipcon)
-		# open_files.update({"lcd": lcd})
-		pass
-	if connected_sensors["moisture"] is not None:
-		moisture = open('Werte/Moisture.txt', use)
-		opened_files.update({"moisture": moisture})
-	if connected_sensors["temperature"] is not None:
-		temperature = open('Werte/Temperature.txt', use)
-		opened_files.update({"temperature": temperature})
-	if connected_sensors["thermocouple"] is not None:
-		thermo = open('Werte/Thermocouple.txt', use)
-		opened_files.update({"thermocouple": thermo})
+	for file_name in file_list:
+		# a lcd can be connected, but has no file
+		if file_name == "lcd":
+			continue
+		file_path = "{0}/{1}.txt".format(path, file_name)
+		new_file = open(file_path, use)
+		opened_files.update({file_name: new_file})
 	return opened_files
 
 
 def close_files(opened_files):
+	"""
+	Closes the given files
+	:param opened_files: currently opened files, which should be closed, as dictionary
+	"""
 	"""Close all given files"""
 	for f in opened_files:
 		opened_files[f].close()
-	return
 
 
 def write_files(sensor_values, opened_files, timestamp):
-	"""Write the sensor values to the opened files"""
+	"""
+	Write the sensor values to the opened files
+	:param sensor_values: the values from sensors, as dictionary
+	:param opened_files: currently opened files, as dictionary
+	:param timestamp: timestamp
+	:return:
+	"""
 	for sensor in opened_files:
 		try:
 			value = sensor_values[sensor]
@@ -64,7 +53,10 @@ def write_files(sensor_values, opened_files, timestamp):
 
 
 def check_and_return(opened_file):
-	"""Checks if a file is present and returns its lines"""
+	"""Checks if a file is present and returns its lines
+	:param opened_file: file, wich should be checked
+	:return: lines of the file
+	"""
 	values = []
 	try:
 		for line in opened_file:
@@ -75,6 +67,10 @@ def check_and_return(opened_file):
 	return values
 
 
-def delete_files():
-	PyToSh.popen_comm(["rm", "-r", "Werte"])
-	PyToSh.popen_comm(["mkdir", "Werte"])
+def delete_files(path):
+	"""
+	Deletes the directory given in path, and therefore the files in the directory as well
+	Then create a fresh directory with same name
+	"""
+	PyToSh.popen_comm(["rm", "-r", path])
+	PyToSh.popen_comm(["mkdir", path])

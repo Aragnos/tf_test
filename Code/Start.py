@@ -1,14 +1,13 @@
-﻿from tinkerforge.ip_connection import IPConnection
+﻿import time
 from datetime import datetime
-import sys
-from Database import Database
+
+from tinkerforge.ip_connection import IPConnection
 import ErrorClass as Error
-import time
-import config
 import Sensor
 import WLAN
-from tinkerforge.ip_connection import Error as IP_Error
-import FileConnector
+import config
+from Database import Database
+from MemoryCard import MemoryCard
 
 # todo: WLAN,
 # Todo: test all
@@ -20,9 +19,11 @@ database_port = config.DATABASE_PORT
 user = config.DATABASE_USER
 password = config.DATABASE_PASSWORD
 database = config.DATABASE_NAME
+path = 'Werte'
 
 
 def build_dictionaries():
+	# todo refactor to new module
 	"""Build sensor dictionary from bricklet UIDS
 
 		Run through each bricklet and check, if it should be connected
@@ -106,37 +107,6 @@ def check_and_connect_database():
 	return db
 
 
-def save_sd():
-	"""Saves sensor values to sd card"""
-	opened_files = FileConnector.open_files(connected_sensors, 'a')
-	FileConnector.write_files(sensor_values, opened_files, timestamp)
-	FileConnector.close_files(opened_files)
-	return
-
-
-def save_sd_to_db():
-	"""Save temporary value from SD to database"""
-	# Get values saved on sd
-	open_files = []
-	try:
-		open_files = FileConnector.open_files(connected_sensors, 'r')
-	except Exception as e:
-		print(e)
-		pass
-	for f in open_files:
-		values = FileConnector.check_and_return(open_files[f])
-		print(len(values))
-		for value in values:
-			# timestamp on 0, sensor value on 1
-			splitted_value = value.split('\t')
-			tmp_dic = {f: splitted_value[1]}
-			# save values to database
-			db_obj.save_db(tmp_dic, splitted_value[0])
-	FileConnector.close_files(open_files)
-	FileConnector.delete_files()
-	return
-
-	
 # --------------------------------------------------
 # Main program procedure
 # --------------------------------------------------
@@ -151,6 +121,12 @@ if __name__ == "__main__":
 
 	ipcon.connect('localhost', 4223)
 
+	# extract list of connected sensors
+	con_sensors_list = []
+	for sen in connected_sensors:
+		con_sensors_list.append(sen)
+	# create MemoryCard Instance
+	memo = MemoryCard(con_sensors_list, path)
 	# Loop forever
 	while True:
 		# get sensor values
@@ -171,14 +147,15 @@ if __name__ == "__main__":
 
 		# Evaluates to True, if db_obj is not None
 		if db_obj:
-			#
-			# Success:
-			# Sensor values  written in files on SD?
+			# function is used in memo, to save things to database -> MemoryCard needs no knowledge about the
+			# actuall method
+			save_db_method = db_obj.save_db
+			# Write previous sensor values from SD to DB?
+			memo.save_sd_to_db(save_db_method)
 			# Save sensor values to DB
-			save_sd_to_db()
 			db_obj.save_db(sensor_values, timestamp)
 		else:
-			# Failure: Save sensor values to SD Card
-			save_sd()
+			# Save sensor values to SD Card
+			memo.save_sd(sensor_values, timestamp)
 		# Sleep
 		time.sleep(10)
