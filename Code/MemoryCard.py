@@ -6,7 +6,7 @@ class MemoryCard:
 	def __init__(self, connected_sensors, path):
 		"""
 
-		:param connected_sensors: sensors connected as a list
+		:param connected_sensors: sensors connected, as a list
 		:param path: path the values should be saved
 		"""
 		self.connected_sensors = connected_sensors

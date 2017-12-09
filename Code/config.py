@@ -1,3 +1,5 @@
+# todo generic: UID, connected sensors
+# todo getter/setter WLAN , Database and Linux Settings
 # --------------------------------------------------
 # WLAN Settings
 # --------------------------------------------------
@@ -31,7 +33,7 @@ UID_THERMOCOUPLE = "B8k"  # UID for Thermocouple Bricklet
 # Connected Sensors
 # If ALL is set to 1 the program tries to connect to all sensors:
 # Ambient, Barometer, Humidity, LCD, Moisture, Temperature and Thermocouple.
-# If it can't find a sensos, this one will be left out.
+# If it can't find a sensors, this one will be left out.
 # If relevant is set to 1, only sensors with '1' will be connected.
 # --------------------------------------------------
 ALL = '1'
