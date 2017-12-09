@@ -1,16 +1,13 @@
-﻿from distutils.command.check import check
-
-from tinkerforge.ip_connection import IPConnection
+﻿from tinkerforge.ip_connection import IPConnection
 from datetime import datetime
 import sys
-import Datenbank as DB
+from Database import Database
 import ErrorClass as Error
 import time
 import config
 import Sensor
 import WLAN
 from tinkerforge.ip_connection import Error as IP_Error
-import SensorFactory
 import FileConnector
 
 # todo: WLAN,
@@ -78,10 +75,9 @@ def build_dictionaries():
 
 
 def check_and_connect_database():
-	db_conn = []
+	db = None
 	try:
-		db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
-									db=database)
+		db = Database(host=database_host, port=database_port, user=user, password=password, database=database)
 	except Error.DatabaseError:
 		# db not available. If WLAN should be configured, try to get it back up
 		if config.WLAN_CONFIGURED == '1':
@@ -101,9 +97,13 @@ def check_and_connect_database():
 						pass
 					else:
 						# WLAN is back up -> one more try to connect to database
-						db_conn = DB.connect_database(host=database_host, port=database_port, user=user, passwd=password,
-													db=database)
-	return db_conn
+						try:
+							db = Database(
+								host=database_host, port=database_port, user=user, password=password, database=database
+							)
+						except Error.DatabaseError:
+							pass
+	return db
 
 
 def save_sd():
@@ -112,20 +112,7 @@ def save_sd():
 	FileConnector.write_files(sensor_values, opened_files, timestamp)
 	FileConnector.close_files(opened_files)
 	return
-	
 
-def save_db(sen_values, time):
-	"""Save sensor values to database"""
-	for sensor in sen_values:
-		if sensor == 'lcd':
-			continue
-		# Write data to database
-		db_statement = "INSERT INTO `" + sensor + "` (`datum`, `wert`) VALUES ('" + time + "', '" + str(sen_values[sensor]) + "')"
-		cursor.execute(db_statement)
-	# Commit changes onto the database
-	connection.commit()
-	return
-	
 
 def save_sd_to_db():
 	"""Save temporary value from SD to database"""
@@ -144,7 +131,7 @@ def save_sd_to_db():
 			splitted_value = value.split('\t')
 			tmp_dic = {f: splitted_value[1]}
 			# save values to database
-			save_db(tmp_dic, splitted_value[0])
+			db_obj.save_db(tmp_dic, splitted_value[0])
 	FileConnector.close_files(open_files)
 	FileConnector.delete_files()
 	return
@@ -161,11 +148,9 @@ if __name__ == "__main__":
 	ipcon = IPConnection()
 	# connect sensors
 	connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
-	# quit()
 
-	# LCD connected?
 	ipcon.connect('localhost', 4223)
-	# 	Success: Wait for user input, Failure: continue
+
 	# Loop forever
 	while True:
 		# get sensor values
@@ -178,23 +163,20 @@ if __name__ == "__main__":
 			except Exception as e:
 				print(e)
 				pass
-		# WLAN configured # todo later, use master/red brick for wlan?
+		# WLAN configured
 		# Connection to database possible
-		db_connection = check_and_connect_database()
-		connection = db_connection[0]
-		cursor = db_connection[1]
+		db_obj = check_and_connect_database()
 		# current time
 		timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
 
-		# Evaluates to True, if db_connection is not empty
-		if db_connection:
+		# Evaluates to True, if db_obj is not None
+		if db_obj:
 			#
 			# Success:
 			# Sensor values  written in files on SD?
 			# Save sensor values to DB
-			cursor = db_connection.cursor()
 			save_sd_to_db()
-			save_db(sensor_values, timestamp)
+			db_obj.save_db(sensor_values, timestamp)
 		else:
 			# Failure: Save sensor values to SD Card
 			save_sd()

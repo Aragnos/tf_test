@@ -6,6 +6,7 @@ import Sensor
 import FileConnector
 from tinkerforge.brick_master import BrickMaster
 
+
 def build_dictionaries():
 	"""Build sensor dictionary from bricklet UIDS
 
@@ -14,7 +15,6 @@ def build_dictionaries():
 
 		:returns: Two dictionaries with bricklets and uids
 		"""
-	rel_sensors = {}
 	rel_uids = {}
 	rel_sensors = {
 		"ambient_light": 1,
@@ -90,4 +90,3 @@ if __name__ == "__main__":
 				pass
 		time.sleep(60)
 		break
-

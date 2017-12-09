@@ -2,8 +2,6 @@
 	# Base Class for exceptions
 	pass
 
-# TODO: change self.msg to self.message and callers
-
 
 class DatabaseError(Error):
 	""" Raised if no connection to db possible """
@@ -37,4 +35,4 @@ class PopenFormatError(Error):
 	""" Raised if command given to popen method is not a list"""
 
 	def __init__(self):
-		self.msg = "Command should be a list"
+		self.message = "Command should be a list"
