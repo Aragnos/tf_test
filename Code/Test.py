@@ -1,20 +1,19 @@
 """ Test file"""
 import config_test as ct
 import BrickletConnector as BC
-dic = ct.bricklet_uids
-
 from tinkerforge.ip_connection import IPConnection
-
+dic = ct.bricklet_uids
 al = BC.AmbientLightConnector("xdy", IPConnection())
 
 print(al.bricklet)
 print(al.get_value())
 
-al_str = 'AmbientLight'
-connector_str = al_str + 'Connector'
+al_str = ct.AMBIENTLIGHT
+connector_str = "{}Connector".format(al_str)
 m = __import__("BrickletConnector")
-m = getattr(m, connector_str)
-al_obj = m("xyz", IPConnection())
+al_obj = al
+m_obj = getattr(m, connector_str)
+al_obj = m_obj("xyz", IPConnection())
 print(al_obj.bricklet)
 print(al_obj.get_value())
 """

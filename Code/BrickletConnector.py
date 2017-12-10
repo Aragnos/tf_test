@@ -51,7 +51,7 @@ class BarometerConnector(BaseConnector):
 		pass
 
 
-class HumidityLightConnector(BaseConnector):
+class HumidityConnector(BaseConnector):
 
 	def create_instance(self, uid, ipcon):
 		return BrickletHumidity(uid, ipcon)
@@ -60,7 +60,7 @@ class HumidityLightConnector(BaseConnector):
 		pass
 
 
-class LCDLightConnector(BaseConnector):
+class LCDConnector(BaseConnector):
 
 	def create_instance(self, uid, ipcon):
 		return BrickletLCD20x4(uid, ipcon)
@@ -84,7 +84,7 @@ class TemperatureConnector(BaseConnector):
 		return BrickletTemperature(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_temperature()
 
 
 class ThermocoupleConnector(BaseConnector):
