@@ -28,7 +28,6 @@ def close_files(opened_files):
 	Closes the given files
 	:param opened_files: currently opened files, which should be closed, as dictionary
 	"""
-	"""Close all given files"""
 	for f in opened_files:
 		opened_files[f].close()
 

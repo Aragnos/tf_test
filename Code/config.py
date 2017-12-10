@@ -36,13 +36,13 @@ UID_THERMOCOUPLE = "B8k"  # UID for Thermocouple Bricklet
 # If it can't find a sensors, this one will be left out.
 # If relevant is set to 1, only sensors with '1' will be connected.
 # --------------------------------------------------
-ALL = '1'
+ALL = '0'
 
 AMBIENT = '1'
-BAROMETER = '1'
-HUMIDITY = '1'
-LCD = '1'
-MOISTURE = '1'
-TEMPERATURE = '1'
-THERMOCOUPLE = '1'
+BAROMETER = ''
+HUMIDITY = ''
+LCD = ''
+MOISTURE = ''
+TEMPERATURE = ''
+THERMOCOUPLE = ''
 # --------------------------------------------------

@@ -35,25 +35,25 @@ def build_dictionaries():
 	rel_uids = {}
 	# not all sensors should be connected
 	if config.ALL == '0':
-		if config.AMBIENT == 1:
+		if config.AMBIENT == '1':
 			rel_sensors.update({"ambient_light": 1})
 			rel_uids.update({"ambient_light": config.UID_AMBIENT})
-		if config.BAROMETER == 1:
+		if config.BAROMETER == '1':
 			rel_sensors.update({"barometer": 1})
 			rel_uids.update({"barometer": config.UID_BAROMETER})
-		if config.HUMIDITY == 1:
+		if config.HUMIDITY == '1':
 			rel_sensors.update({"humidity": 1})
 			rel_uids.update({"humidity": config.UID_HUMIDITY})
-		if config.LCD == 1:
+		if config.LCD == '1':
 			rel_sensors.update({"lcd": 1})
 			rel_uids.update({"lcd": config.UID_LCD})
-		if config.MOISTURE == 1:
+		if config.MOISTURE == '1':
 			rel_sensors.update({"moisture": 1})
 			rel_uids.update({"moisture": config.UID_MOISTURE})
-		if config.TEMPERATURE == 1:
+		if config.TEMPERATURE == '1':
 			rel_sensors.update({"temperature": 1})
 			rel_uids.update({"temperature": config.UID_TEMPERATURE})
-		if config.THERMOCOUPLE == 1:
+		if config.THERMOCOUPLE == '1':
 			rel_sensors.update({"thermocouple": 1})
 			rel_uids.update({"thermocouple": config.UID_THERMOCOUPLE})
 	else:
@@ -133,12 +133,10 @@ if __name__ == "__main__":
 		sensor_values = {}
 		for sensor in connected_sensors:
 			try:
-				# todo for test reasons use try structure
 				new_value = Sensor.get_value(connected_sensors[sensor])
 				sensor_values.update({sensor: new_value})
 			except Exception as e:
 				print(e)
-				pass
 		# WLAN configured
 		# Connection to database possible
 		db_obj = check_and_connect_database()
@@ -148,7 +146,7 @@ if __name__ == "__main__":
 		# Evaluates to True, if db_obj is not None
 		if db_obj:
 			# function is used in memo, to save things to database -> MemoryCard needs no knowledge about the
-			# actuall method
+			# actual method
 			save_db_method = db_obj.save_db
 			# Write previous sensor values from SD to DB?
 			memo.save_sd_to_db(save_db_method)
