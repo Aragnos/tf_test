@@ -14,7 +14,7 @@ from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 class BaseConnector:
 
 	def __init__(self, uid, ipcon):
-		self.create_instance(uid, ipcon)
+		self.bricklet = self.create_instance(uid, ipcon)
 
 	def create_instance(self, uid, ipcon):
 		"""

@@ -1,25 +1,22 @@
 """ Test file"""
+import config_test as ct
+import BrickletConnector as BC
+dic = ct.bricklet_uids
 
+from tinkerforge.ip_connection import IPConnection
 
-file_name = 'Test.txt'
-opened_file = open(file_name, 'r')
+al = BC.AmbientLightConnector("xdy", IPConnection())
 
-lines = sum(1 for line in opened_file)
-print(lines)
-opened_file.close()
+print(al.bricklet)
+print(al.get_value())
 
-values = []
-values.append('Horseshit\t200000')
-values.append('Some more')
-
-for v in values:
-	splitted = v.split('\t')
-	for s in splitted:
-		print s
-	print(v)
-values = []
-if values:
-	print('Joah')
+al_str = 'AmbientLight'
+connector_str = al_str + 'Connector'
+m = __import__("BrickletConnector")
+m = getattr(m, connector_str)
+al_obj = m("xyz", IPConnection())
+print(al_obj.bricklet)
+print(al_obj.get_value())
 """
 def x():
 	print(5)
