@@ -1,0 +1,33 @@
+﻿Sensor Liste:d
+
+accelerometer
+ambient_light
+ambient_light_v2
+barometer
+co2
+color
+current12
+current25
+distance_ir
+distance_us
+dust_detecctor
+gps
+gps_v2
+hall_effect
+humidity
+laser_range_finder
+linear_poti (?)
+load_cell
+moisture
+motion_detector
+ptc
+rotary_encoder
+rotary_poti
+sound_intensity
+temperature
+temperature_ir
+thermocouple
+tilt
+uv_light
+voltage
+voltage_current
