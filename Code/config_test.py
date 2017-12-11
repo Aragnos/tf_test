@@ -6,7 +6,7 @@
 # --------------------------------------------------
 ACCELEROMETER = "Accelerometer"
 AMBIENT_LIGHT = "AmbientLight"
-AMBIENT_LIGHT_V2 = "ambientLightV2"
+AMBIENT_LIGHT_V2 = "AmbientLightV2"
 BAROMETER = "Barometer"
 CO2 = "CO2"
 COLOR = "Color"
@@ -20,7 +20,7 @@ GPS_V2 = "GPS_V2"
 HALL_EFFECT = "HallEffect"
 HUMIDITY = "Humidity"
 LASER_RANGE_FINDER = "LaserRangeFinder"
-LINEAR_POTI  = "LinearPoti"
+LINEAR_POTI = "LinearPoti"
 LOAD_CELL = "LoadCell"
 MOISTURE = "Moisture"
 MOTION_DETECTOR = "MotionDetector"
@@ -39,11 +39,40 @@ VOLTAGE_CURRENT = "VoltageCurrent"
 # Bricklet UIDS
 # --------------------------------------------------
 bricklet_uids = {
-	AMBIENT_LIGHT_V2: "yBG",  # UID of Ambient Light Bricklet 2.0
-	BAROMETER: "ytN",  # UID for Barometer Bricklet
-	HUMIDITY: "Cd7",  # UID for Humidity Bricklet
-	# LCD: "BFX",  # UID of LCD Display
-	MOISTURE: "zSG",  # UID for Moisture Bricklet
-	TEMPERATURE: "zbS",  # UID for Temperature Bricklet
-	THERMOCOUPLE: "B8k"  # UID for Thermocouple Bricklet
+	ACCELEROMETER: "",
+	AMBIENT_LIGHT: "",
+	AMBIENT_LIGHT_V2: "yBG",
+	BAROMETER: "ytN",
+	CO2: "",
+	COLOR: "",
+	CURRENT12: "",
+	CURRENT25: "",
+	DISTANCE_IR: "",
+	DISTANCE_US: "",
+	DUST_DETECTOR: "",
+	GPS: "",
+	GPS_V2: "",
+	HALL_EFFECT: "",
+	HUMIDITY: "Cd7",
+	LASER_RANGE_FINDER: "",
+	LINEAR_POTI: "",
+	LOAD_CELL: "",
+	# LCD: "BFX",
+	MOISTURE: "zSG",
+	MOTION_DETECTOR: "",
+	PTC: "",
+	ROTARY_ENCODER: "",
+	ROTARY_POTI: "",
+	SOUND_INTENSITY: "",
+	TEMPERATURE: "zbS",
+	TEMPERATURE_IR: "",
+	THERMOCOUPLE: "B8k",
+	TILT: "",
+	UV_LIGHT: "",
+	VOLTAGE: "",
+	VOLTAGE_CURRENT: ""
 }
+
+bricklets_in_use = [
+	AMBIENT_LIGHT_V2
+]
