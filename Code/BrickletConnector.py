@@ -25,10 +25,6 @@ class BaseConnector:
 		"""
 		raise NotImplementedError('create_instance has to be overwritten by subclasses')
 
-	def get_value(self):
-
-		raise NotImplementedError('get_value has to be overwritten by subclasses')
-
 
 class LCDConnector(BaseConnector):
 	def create_instance(self, uid, ipcon):

@@ -33,8 +33,11 @@ from tinkerforge.bricklet_uv_light import UVLight
 from tinkerforge.bricklet_voltage import Voltage
 from tinkerforge.bricklet_voltage_current import VoltageCurrent
 
-class BaseSensorConnector(BaseConnector):
 
+class BaseSensorConnector(BaseConnector):
+	"""
+	Encapsulation for all Sensor bricklets, or rather for all bricklets capable of returning measurements
+	"""
 	def create_instance(self, uid, ipcon):
 		raise NotImplementedError('create_instance has to be overwritten by subclasses')
 
@@ -44,6 +47,19 @@ class BaseSensorConnector(BaseConnector):
 		:return: sensor value
 		"""
 		raise NotImplementedError('create_instance has to be overwritten by subclasses')
+
+
+class NotConnectedConnector(BaseSensorConnector):
+	"""
+	Dummy Class. If a sensors fails to return a value, the bricklet object will be swapped with this dummy.
+	With this, the program does not have to wait for the response of the sensor (which will fail) in subsequent call and
+	gets instead a dummy response
+	"""
+	def create_instance(self, uid, ipcon):
+		return None
+
+	def get_value(self):
+		return None
 
 
 class AmbientLightConnector(BaseSensorConnector):
