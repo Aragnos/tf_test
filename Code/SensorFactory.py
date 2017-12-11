@@ -8,9 +8,6 @@ from tinkerforge.bricklet_moisture import BrickletMoisture
 from tinkerforge.bricklet_temperature import BrickletTemperature
 from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 
-# TODO two methods for barometer
-
-
 class Sensor:
 
 	def __init__(self):

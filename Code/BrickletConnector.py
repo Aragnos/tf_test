@@ -1,7 +1,6 @@
 """
 Connects all Bricklets
 """
-# todo refac with SensorConnector
 from tinkerforge.bricklet_ambient_light_v2 import BrickletAmbientLightV2
 from tinkerforge.bricklet_barometer import BrickletBarometer
 from tinkerforge.bricklet_humidity import BrickletHumidity

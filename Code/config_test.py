@@ -73,6 +73,11 @@ bricklet_uids = {
 	VOLTAGE_CURRENT: ""
 }
 
-bricklets_in_use = [
+# todo description
+sensors_in_use = [
 	AMBIENT_LIGHT_V2
+]
+
+bricklets_in_use = [
+	None
 ]

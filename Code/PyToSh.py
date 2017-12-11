@@ -70,12 +70,4 @@ def check_type(command):
 		raise PopenFormatError()
 
 
-def change_premissions(password):
-	""" Changes the permissions so sudo can be used without password """
-	# Todo required? No
-	command = ['sudo', 'visudo']
-	add = 'tf ALL=(ALL) NOPASSWD: ALL'
-	p = Popen(command, stdout=PIPE, stdin=PIPE)
-	output = p.communicate(password)[0]
-	# Todo Test in Linux environment
-	return
+

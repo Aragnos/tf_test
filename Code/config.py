@@ -1,4 +1,3 @@
-# todo generic: UID, connected sensors
 # todo getter/setter WLAN , Database and Linux Settings
 # --------------------------------------------------
 # WLAN Settings

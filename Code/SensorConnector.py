@@ -1,4 +1,5 @@
 # todo refactor with BrickletConnector
+# todo add classes
 from BrickletConnector import BaseConnector
 
 from tinkerforge.bricklet_accelerometer import Accelerometer
