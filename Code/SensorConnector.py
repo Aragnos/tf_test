@@ -2,37 +2,37 @@
 # todo add classes
 from BrickletConnector import BaseConnector
 
-from tinkerforge.bricklet_accelerometer import Accelerometer
-from tinkerforge.bricklet_ambient_light import AmbientLight
+from tinkerforge.bricklet_accelerometer import BrickletAccelerometer
+from tinkerforge.bricklet_ambient_light import BrickletAmbientLight
 from tinkerforge.bricklet_ambient_light_v2 import BrickletAmbientLightV2
 from tinkerforge.bricklet_barometer import BrickletBarometer
-from tinkerforge.bricklet_co2 import CO2
-from tinkerforge.bricklet_color import Color
-from tinkerforge.bricklet_current12 import Current12
-from tinkerforge.bricklet_current25 import Current25
-from tinkerforge.bricklet_distance_ir import DistanceIR
-from tinkerforge.bricklet_distance_us import DistanceUS
-from tinkerforge.bricklet_dust_detector import DustDetector
-from tinkerforge.bricklet_gps import GPS
-from tinkerforge.bricklet_gps_v2 import GPSV2
-from tinkerforge.bricklet_hall_effect import HallEffect
+from tinkerforge.bricklet_co2 import BrickletCO2
+from tinkerforge.bricklet_color import BrickletColor
+from tinkerforge.bricklet_current12 import BrickletCurrent12
+from tinkerforge.bricklet_current25 import BrickletCurrent25
+from tinkerforge.bricklet_distance_ir import BrickletDistanceIR
+from tinkerforge.bricklet_distance_us import BrickletDistanceUS
+from tinkerforge.bricklet_dust_detector import BrickletDustDetector
+from tinkerforge.bricklet_gps import BrickletGPS
+from tinkerforge.bricklet_gps_v2 import BrickletGPSV2
+from tinkerforge.bricklet_hall_effect import BrickletHallEffect
 from tinkerforge.bricklet_humidity import BrickletHumidity
-from tinkerforge.bricklet_laser_range_finder import LaserRangeFinder
-from tinkerforge.bricklet_linear_poti import LinearPoti
-from tinkerforge.bricklet_load_cell import LoadCell
+from tinkerforge.bricklet_laser_range_finder import BrickletLaserRangeFinder
+from tinkerforge.bricklet_linear_poti import BrickletLinearPoti
+from tinkerforge.bricklet_load_cell import BrickletLoadCell
 from tinkerforge.bricklet_moisture import BrickletMoisture
-from tinkerforge.bricklet_motion_detector import MotionDetector
-from tinkerforge.bricklet_ptc import PTC
-from tinkerforge.bricklet_rotary_encoder import RotaryEncoder
-from tinkerforge.bricklet_rotary_poti import RotaryPoti
-from tinkerforge.bricklet_sound_intensity import SoundIntensity
+from tinkerforge.bricklet_motion_detector import BrickletMotionDetector
+from tinkerforge.bricklet_ptc import BrickletPTC
+from tinkerforge.bricklet_rotary_encoder import BrickletRotaryEncoder
+from tinkerforge.bricklet_rotary_poti import BrickletRotaryPoti
+from tinkerforge.bricklet_sound_intensity import BrickletSoundIntensity
 from tinkerforge.bricklet_temperature import BrickletTemperature
-from tinkerforge.bricklet_temperature_ir import TemperatureIR
+from tinkerforge.bricklet_temperature_ir import BrickletTemperatureIR
 from tinkerforge.bricklet_thermocouple import BrickletThermocouple
-from tinkerforge.bricklet_tilt import Tilt
-from tinkerforge.bricklet_uv_light import UVLight
-from tinkerforge.bricklet_voltage import Voltage
-from tinkerforge.bricklet_voltage_current import VoltageCurrent
+from tinkerforge.bricklet_tilt import BrickletTilt
+from tinkerforge.bricklet_uv_light import BrickletUVLight
+from tinkerforge.bricklet_voltage import BrickletVoltage
+from tinkerforge.bricklet_voltage_current import BrickletVoltageCurrent
 
 
 class BaseSensorConnector(BaseConnector):
@@ -55,6 +55,7 @@ class NotConnectedConnector(BaseSensorConnector):
 	Dummy Class. If a sensors fails to return a value, the bricklet object will be swapped with this dummy.
 	With this, the program does not have to wait for the response of the sensor (which will fail) in subsequent call and
 	gets instead a dummy response
+	Necessary if list in config is not up-to-date
 	"""
 	def create_instance(self, uid, ipcon):
 		return None
@@ -63,7 +64,23 @@ class NotConnectedConnector(BaseSensorConnector):
 		return None
 
 
+class AccelerometerConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletAccelerometer(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
 class AmbientLightConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletAmbientLight(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class AmbientLightV2Connector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletAmbientLightV2(uid, ipcon)
 
@@ -79,9 +96,113 @@ class BarometerConnector(BaseSensorConnector):
 		pass
 
 
+class CO2Connector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletCO2(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class ColorConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletColor(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class Current12Connector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletCurrent12(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class Current25Connector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletCurrent25(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class DistanceIRConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletDistanceIR(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class DistanceUSConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletDistanceUS(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class DustDetectorConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletDustDetector(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class GPSConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletGPS(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class ConnectorGPSV2(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletGPSV2(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class HallEffectConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletHallEffect(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
 class HumidityConnector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletHumidity(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class LaserRangeFinderConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletLaserRangeFinder(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class LinearPotiConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletLinearPoti(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class LoadCellConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletLoadCell(uid, ipcon)
 
 	def get_value(self):
 		pass
@@ -95,6 +216,46 @@ class MoistureConnector(BaseSensorConnector):
 		pass
 
 
+class MotionDetectorConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletMotionDetector(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class PTCConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletPTC(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class RotaryEncoderConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletRotaryEncoder(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class RotaryPotiConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletRotaryPoti(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class SoundIntensityConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletSoundIntensity(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
 class TemperatureConnector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletTemperature(uid, ipcon)
@@ -103,9 +264,50 @@ class TemperatureConnector(BaseSensorConnector):
 		return self.bricklet.get_temperature()
 
 
+class TemperatureIRConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletTemperatureIR(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
 class ThermocoupleConnector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletThermocouple(uid, ipcon)
 
 	def get_value(self):
 		pass
+
+
+class TiltConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletTilt(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class UVLightConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletUVLight(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class VoltageConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletVoltage(uid, ipcon)
+
+	def get_value(self):
+		pass
+
+
+class VoltageCurrentConnector(BaseSensorConnector):
+	def create_instance(self, uid, ipcon):
+		return BrickletVoltageCurrent(uid, ipcon)
+
+	def get_value(self):
+		pass
+

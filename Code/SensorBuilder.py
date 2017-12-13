@@ -2,11 +2,11 @@
 Connects all Sensors, using BrickletConnector
 Stores sensor object and get_value() method
 """
-# todo integrate into Sensor
-import config_test
+# todo integrate into Sensor (or SensorConnector?)
+from config_test import bricklet_uids, sensors_in_use
 
 
-def create_objects(ipcon):
+def create_sensor_objects(ipcon):
 	"""
 
 	:param ipcon: IPConnection from Tinkerforge
@@ -16,12 +16,12 @@ def create_objects(ipcon):
 	connector = __import__("BrickletConnector")
 	# create class objects for every bricklet uid in config file
 	# if uid is empty, skip
-	for bricklet in config_test.bricklet_uids:
-		uid = config_test.bricklet_uids[bricklet]
+	for sensor in sensors_in_use:
+		uid = bricklet_uids[sensor]
 		if uid == "":
 			continue
-		class_string = "{}Connector".format(bricklet)
+		class_string = "{}Connector".format(sensor)
 		class_reference = getattr(connector, class_string)
 		brick_object = class_reference(uid, ipcon)
-		bricklet_classes.update({bricklet: brick_object})
+		bricklet_classes.update({sensor: brick_object})
 	return bricklet_classes
