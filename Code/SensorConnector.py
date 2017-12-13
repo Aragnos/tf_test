@@ -50,26 +50,12 @@ class BaseSensorConnector(BaseConnector):
 		raise NotImplementedError('create_instance has to be overwritten by subclasses')
 
 
-class NotConnectedConnector(BaseSensorConnector):
-	"""
-	Dummy Class. If a sensors fails to return a value, the bricklet object will be swapped with this dummy.
-	With this, the program does not have to wait for the response of the sensor (which will fail) in subsequent call and
-	gets instead a dummy response
-	Necessary if list in config is not up-to-date
-	"""
-	def create_instance(self, uid, ipcon):
-		return None
-
-	def get_value(self):
-		return None
-
-
 class AccelerometerConnector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletAccelerometer(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_acceleration()
 
 
 class AmbientLightConnector(BaseSensorConnector):
@@ -77,7 +63,7 @@ class AmbientLightConnector(BaseSensorConnector):
 		return BrickletAmbientLight(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_illuminance()
 
 
 class AmbientLightV2Connector(BaseSensorConnector):
@@ -85,7 +71,7 @@ class AmbientLightV2Connector(BaseSensorConnector):
 		return BrickletAmbientLightV2(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_illuminance()
 
 
 class BarometerConnector(BaseSensorConnector):
@@ -93,7 +79,7 @@ class BarometerConnector(BaseSensorConnector):
 		return BrickletBarometer(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_air_pressure()
 
 
 class CO2Connector(BaseSensorConnector):
@@ -101,15 +87,16 @@ class CO2Connector(BaseSensorConnector):
 		return BrickletCO2(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_co2_concentration()
 
 
 class ColorConnector(BaseSensorConnector):
+	# todo has more methods
 	def create_instance(self, uid, ipcon):
 		return BrickletColor(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_color()
 
 
 class Current12Connector(BaseSensorConnector):
@@ -117,7 +104,7 @@ class Current12Connector(BaseSensorConnector):
 		return BrickletCurrent12(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_current()
 
 
 class Current25Connector(BaseSensorConnector):
@@ -125,7 +112,7 @@ class Current25Connector(BaseSensorConnector):
 		return BrickletCurrent25(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_current()
 
 
 class DistanceIRConnector(BaseSensorConnector):
@@ -133,7 +120,7 @@ class DistanceIRConnector(BaseSensorConnector):
 		return BrickletDistanceIR(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_distance()
 
 
 class DistanceUSConnector(BaseSensorConnector):
@@ -141,7 +128,7 @@ class DistanceUSConnector(BaseSensorConnector):
 		return BrickletDistanceUS(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_distance()
 
 
 class DustDetectorConnector(BaseSensorConnector):
@@ -149,7 +136,7 @@ class DustDetectorConnector(BaseSensorConnector):
 		return BrickletDustDetector(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_dust_density()
 
 
 class GPSConnector(BaseSensorConnector):
@@ -157,7 +144,7 @@ class GPSConnector(BaseSensorConnector):
 		return BrickletGPS(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_coordinates()
 
 
 class ConnectorGPSV2(BaseSensorConnector):
@@ -165,7 +152,7 @@ class ConnectorGPSV2(BaseSensorConnector):
 		return BrickletGPSV2(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_coordinates()
 
 
 class HallEffectConnector(BaseSensorConnector):
@@ -173,7 +160,7 @@ class HallEffectConnector(BaseSensorConnector):
 		return BrickletHallEffect(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_edge_interrupt()
 
 
 class HumidityConnector(BaseSensorConnector):
@@ -181,7 +168,7 @@ class HumidityConnector(BaseSensorConnector):
 		return BrickletHumidity(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_humidity()
 
 
 class LaserRangeFinderConnector(BaseSensorConnector):
@@ -189,7 +176,7 @@ class LaserRangeFinderConnector(BaseSensorConnector):
 		return BrickletLaserRangeFinder(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_distance()
 
 
 class LinearPotiConnector(BaseSensorConnector):
@@ -197,7 +184,7 @@ class LinearPotiConnector(BaseSensorConnector):
 		return BrickletLinearPoti(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_position()
 
 
 class LoadCellConnector(BaseSensorConnector):
@@ -205,7 +192,7 @@ class LoadCellConnector(BaseSensorConnector):
 		return BrickletLoadCell(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_weight()
 
 
 class MoistureConnector(BaseSensorConnector):
@@ -213,7 +200,7 @@ class MoistureConnector(BaseSensorConnector):
 		return BrickletMoisture(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_moisture_value()
 
 
 class MotionDetectorConnector(BaseSensorConnector):
@@ -221,15 +208,16 @@ class MotionDetectorConnector(BaseSensorConnector):
 		return BrickletMotionDetector(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_motion_detected()
 
 
 class PTCConnector(BaseSensorConnector):
+	# todo more values
 	def create_instance(self, uid, ipcon):
 		return BrickletPTC(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_temperature()
 
 
 class RotaryEncoderConnector(BaseSensorConnector):
@@ -237,7 +225,7 @@ class RotaryEncoderConnector(BaseSensorConnector):
 		return BrickletRotaryEncoder(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_count()
 
 
 class RotaryPotiConnector(BaseSensorConnector):
@@ -245,7 +233,7 @@ class RotaryPotiConnector(BaseSensorConnector):
 		return BrickletRotaryPoti(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_analog_value()
 
 
 class SoundIntensityConnector(BaseSensorConnector):
@@ -253,7 +241,7 @@ class SoundIntensityConnector(BaseSensorConnector):
 		return BrickletSoundIntensity(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_intensity()
 
 
 class TemperatureConnector(BaseSensorConnector):
@@ -265,11 +253,12 @@ class TemperatureConnector(BaseSensorConnector):
 
 
 class TemperatureIRConnector(BaseSensorConnector):
+	# todo more values
 	def create_instance(self, uid, ipcon):
 		return BrickletTemperatureIR(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_object_temperature()
 
 
 class ThermocoupleConnector(BaseSensorConnector):
@@ -277,7 +266,7 @@ class ThermocoupleConnector(BaseSensorConnector):
 		return BrickletThermocouple(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_temperature()
 
 
 class TiltConnector(BaseSensorConnector):
@@ -293,21 +282,22 @@ class UVLightConnector(BaseSensorConnector):
 		return BrickletUVLight(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_uv_light()
 
 
 class VoltageConnector(BaseSensorConnector):
+	# more values
 	def create_instance(self, uid, ipcon):
 		return BrickletVoltage(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_voltage()
 
 
 class VoltageCurrentConnector(BaseSensorConnector):
+	# more values
 	def create_instance(self, uid, ipcon):
 		return BrickletVoltageCurrent(uid, ipcon)
 
 	def get_value(self):
-		pass
-
+		return self.bricklet.get_current()
