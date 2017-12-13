@@ -5,7 +5,6 @@ Stores sensor object and get_value() method
 # todo integrate into Sensor (or SensorConnector?)
 from config_test import bricklet_uids, sensors_in_use
 
-
 def create_sensor_objects(ipcon):
 	"""
 
@@ -13,7 +12,7 @@ def create_sensor_objects(ipcon):
 	:return: bricklet class objects, as dictionary
 	"""
 	bricklet_classes = {}
-	connector = __import__("BrickletConnector")
+	connector = __import__("SensorConnector")
 	# create class objects for every bricklet uid in config file
 	# if uid is empty, skip
 	for sensor in sensors_in_use:
@@ -25,3 +24,16 @@ def create_sensor_objects(ipcon):
 		brick_object = class_reference(uid, ipcon)
 		bricklet_classes.update({sensor: brick_object})
 	return bricklet_classes
+
+
+def poll_values(sensors):
+	values = {}
+	for_del = []
+	for sensor in sensors:
+		try:
+			values.update({sensor: sensors[sensor].get_value()})
+		except Exception:
+			for_del.append(sensor)
+	for f in for_del:
+		del sensors[f]
+	return values

@@ -147,7 +147,7 @@ class GPSConnector(BaseSensorConnector):
 		return self.bricklet.get_coordinates()
 
 
-class ConnectorGPSV2(BaseSensorConnector):
+class GPSV2Connector(BaseSensorConnector):
 	def create_instance(self, uid, ipcon):
 		return BrickletGPSV2(uid, ipcon)
 
@@ -274,7 +274,7 @@ class TiltConnector(BaseSensorConnector):
 		return BrickletTilt(uid, ipcon)
 
 	def get_value(self):
-		pass
+		return self.bricklet.get_tilt_state()
 
 
 class UVLightConnector(BaseSensorConnector):

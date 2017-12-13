@@ -36,3 +36,10 @@ class PopenFormatError(Error):
 
 	def __init__(self):
 		self.message = "Command should be a list"
+
+
+class NotConnectedError(Error):
+	"""Raised if sensor is not connected, but attempt to get values is made"""
+
+	def __init__(self):
+		self.message = "Not Connected"
