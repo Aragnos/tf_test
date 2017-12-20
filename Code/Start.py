@@ -6,6 +6,7 @@ import ErrorClass as Error
 import Sensor
 import WLAN
 import config
+import SensorBuilder
 from Database import Database
 from MemoryCard import MemoryCard
 
@@ -24,6 +25,7 @@ path = 'Werte'
 
 def build_dictionaries():
 	# todo refactor to new module
+	# todo or delete
 	"""Build sensor dictionary from bricklet UIDS
 
 		Run through each bricklet and check, if it should be connected
@@ -76,6 +78,7 @@ def build_dictionaries():
 
 
 def check_and_connect_database():
+	# todo refac
 	db = None
 	try:
 		db = Database(host=database_host, port=database_port, user=user, password=password, database=database)
@@ -112,31 +115,22 @@ def check_and_connect_database():
 # --------------------------------------------------
 
 if __name__ == "__main__":
-	# Build dictionary from bricklet UIDS
-	[relevant_sensors, relevant_uids] = build_dictionaries()
-	# connect to daemon via ipconnection
 	ipcon = IPConnection()
 	# connect sensors
-	connected_sensors = Sensor.connect_sensors(relevant_sensors, relevant_uids, ipcon)
-
+	connected_sensors = SensorBuilder.create_sensor_objects(ipcon)
+	# connect to daemon via ipconnection
 	ipcon.connect('localhost', 4223)
 
-	# extract list of connected sensors
-	con_sensors_list = []
-	for sen in connected_sensors:
-		con_sensors_list.append(sen)
-	# create MemoryCard Instance
-	memo = MemoryCard(con_sensors_list, path)
 	# Loop forever
 	while True:
 		# get sensor values
-		sensor_values = {}
-		for sensor in connected_sensors:
-			try:
-				new_value = Sensor.get_value(connected_sensors[sensor])
-				sensor_values.update({sensor: new_value})
-			except Exception as e:
-				print(e)
+		sensor_values = SensorBuilder.poll_values(connected_sensors)
+		# extract list of connected sensors for MemoryCard Object
+		con_sensors_list = []
+		for sen in connected_sensors:
+			con_sensors_list.append(sen)
+		# create MemoryCard Instance
+		memo = MemoryCard(con_sensors_list, path)
 		# WLAN configured
 		# Connection to database possible
 		db_obj = check_and_connect_database()
@@ -145,10 +139,10 @@ if __name__ == "__main__":
 
 		# Evaluates to True, if db_obj is not None
 		if db_obj:
-			# function is used in memo, to save things to database -> MemoryCard needs no knowledge about the
-			# actual method
+			# function is used in memo, to save things to database
+			# -> MemoryCard needs no knowledge about the actual method
 			save_db_method = db_obj.save_db
-			# Write previous sensor values from SD to DB?
+			# Write previous sensor values from SD to DB
 			memo.save_sd_to_db(save_db_method)
 			# Save sensor values to DB
 			db_obj.save_db(sensor_values, timestamp)

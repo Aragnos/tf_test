@@ -23,7 +23,7 @@ class Database:
 
 	def connect_database(self):
 		""" Tries to connect to the database.
-			Raises Connection Error """
+			Raises Database Error """
 		try:
 			self.connection = pymysql.connect(
 				host=self.host, port=int(self.port), user=self.user, passwd=self.password, db=self.db

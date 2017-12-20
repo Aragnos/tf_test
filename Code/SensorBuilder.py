@@ -29,11 +29,13 @@ def create_sensor_objects(ipcon):
 
 def poll_values(sensors):
 	values = {}
+	# sensors which fail to respond in time will be deleted
 	for_del = []
 	for sensor in sensors:
 		try:
 			values.update({sensor: sensors[sensor].get_value()})
-		except Exception:
+		except Exception as e:
+			print(e)
 			for_del.append(sensor)
 	for f in for_del:
 		del sensors[f]
