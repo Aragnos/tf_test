@@ -1,13 +1,7 @@
 """
 Connects all Bricklets
 """
-from tinkerforge.bricklet_ambient_light_v2 import BrickletAmbientLightV2
-from tinkerforge.bricklet_barometer import BrickletBarometer
-from tinkerforge.bricklet_humidity import BrickletHumidity
 from tinkerforge.bricklet_lcd_20x4 import BrickletLCD20x4
-from tinkerforge.bricklet_moisture import BrickletMoisture
-from tinkerforge.bricklet_temperature import BrickletTemperature
-from tinkerforge.bricklet_thermocouple import BrickletThermocouple
 
 
 class BaseConnector:
