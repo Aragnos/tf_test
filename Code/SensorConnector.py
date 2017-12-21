@@ -128,7 +128,7 @@ class DistanceUSConnector(BaseSensorConnector):
 		return BrickletDistanceUS(uid, ipcon)
 
 	def get_value(self):
-		return self.bricklet.get_distance()
+		return self.bricklet.get_distance_value()
 
 
 class DustDetectorConnector(BaseSensorConnector):
@@ -225,7 +225,7 @@ class RotaryEncoderConnector(BaseSensorConnector):
 		return BrickletRotaryEncoder(uid, ipcon)
 
 	def get_value(self):
-		return self.bricklet.get_count()
+		return self.bricklet.get_count(0)
 
 
 class RotaryPotiConnector(BaseSensorConnector):

@@ -18,8 +18,9 @@ def create_sensor_objects(ipcon):
 	# if uid is empty, skip
 	for sensor in sensors_in_use:
 		uid = bricklet_uids[sensor]
-		if uid == "":
-			continue
+		# todo uncomment
+		# if uid == "":
+		#	continue
 		class_string = "{}Connector".format(sensor)
 		class_reference = getattr(connector, class_string)
 		brick_object = class_reference(uid, ipcon)
@@ -33,6 +34,7 @@ def poll_values(sensors):
 	for_del = []
 	for sensor in sensors:
 		try:
+			print(sensor)
 			values.update({sensor: sensors[sensor].get_value()})
 		except Exception as e:
 			print(e)
