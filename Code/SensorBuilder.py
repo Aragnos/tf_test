@@ -5,7 +5,7 @@ Stores sensor object and get_value() method
 # todo integrate into Sensor (or SensorConnector?)
 from config_test import bricklet_uids, sensors_in_use
 
-
+# todo zwei neue Parameter, um Abhaengigkeit von config zu loesen
 def create_sensor_objects(ipcon):
 	"""
 

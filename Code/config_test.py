@@ -1,4 +1,24 @@
 # todo: add missing Bricklets in UID and mapping section
+# todo getter/setter WLAN , Database and Linux Settings
+# --------------------------------------------------
+# WLAN Settings
+# --------------------------------------------------
+WLAN_CONFIGURED = '0'
+WLAN_USER = ""
+WLAN_PASSWORD = ""
+INTERFACE_NAME = "wlan0"
+# --------------------------------------------------
+# Database Settings
+# --------------------------------------------------
+DATABASE_HOST = "localhost"
+DATABASE_PORT = "3306"
+DATABASE_NAME = "tf"
+DATABASE_USER = "Red"
+DATABASE_PASSWORD = "red-brick42"
+# --------------------------------------------------
+# Linux Settings
+# --------------------------------------------------
+ROOT_PASSWORD = "tf"
 # --------------------------------------------------
 # Mapping Bricklet name to internal name
 # written in caps, as these are CONSTANTS

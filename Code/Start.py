@@ -5,7 +5,7 @@ from tinkerforge.ip_connection import IPConnection
 import ErrorClass as Error
 import Sensor
 import WLAN
-import config
+import config_test
 import SensorBuilder
 from Database import Database
 from MemoryCard import MemoryCard
@@ -15,67 +15,12 @@ from MemoryCard import MemoryCard
 # todo opt: LCD Script
 # todo change hardcoded strings to variables
 # Database stuff
-database_host = config.DATABASE_HOST
-database_port = config.DATABASE_PORT
-user = config.DATABASE_USER
-password = config.DATABASE_PASSWORD
-database = config.DATABASE_NAME
+database_host = config_test.DATABASE_HOST
+database_port = config_test.DATABASE_PORT
+user = config_test.DATABASE_USER
+password = config_test.DATABASE_PASSWORD
+database = config_test.DATABASE_NAME
 path = 'Werte'
-
-
-def build_dictionaries():
-	# todo refactor to new module
-	# todo or delete
-	"""Build sensor dictionary from bricklet UIDS
-
-		Run through each bricklet and check, if it should be connected
-		Add these bricklets and corresponding uids to a dictionary, respectively.
-
-		:returns: Two dictionaries with bricklets and uids
-		"""
-	rel_sensors = {}
-	rel_uids = {}
-	# not all sensors should be connected
-	if config.ALL == '0':
-		if config.AMBIENT == '1':
-			rel_sensors.update({"ambient_light": 1})
-			rel_uids.update({"ambient_light": config.UID_AMBIENT})
-		if config.BAROMETER == '1':
-			rel_sensors.update({"barometer": 1})
-			rel_uids.update({"barometer": config.UID_BAROMETER})
-		if config.HUMIDITY == '1':
-			rel_sensors.update({"humidity": 1})
-			rel_uids.update({"humidity": config.UID_HUMIDITY})
-		if config.LCD == '1':
-			rel_sensors.update({"lcd": 1})
-			rel_uids.update({"lcd": config.UID_LCD})
-		if config.MOISTURE == '1':
-			rel_sensors.update({"moisture": 1})
-			rel_uids.update({"moisture": config.UID_MOISTURE})
-		if config.TEMPERATURE == '1':
-			rel_sensors.update({"temperature": 1})
-			rel_uids.update({"temperature": config.UID_TEMPERATURE})
-		if config.THERMOCOUPLE == '1':
-			rel_sensors.update({"thermocouple": 1})
-			rel_uids.update({"thermocouple": config.UID_THERMOCOUPLE})
-	else:
-		rel_sensors = {
-			"ambient_light": 1,
-			"barometer": 1,
-			"humidity": 1,
-			"lcd": 1,
-			"moisture": 1,
-			"temperature": 1,
-			"thermocouple": 1}
-		rel_uids.update({"ambient_light": config.UID_AMBIENT})
-		rel_uids.update({"barometer": config.UID_BAROMETER})
-		rel_uids.update({"humidity": config.UID_HUMIDITY})
-		rel_uids.update({"lcd": config.UID_LCD})
-		rel_uids.update({"moisture": config.UID_MOISTURE})
-		rel_uids.update({"temperature": config.UID_TEMPERATURE})
-		rel_uids.update({"thermocouple": config.UID_THERMOCOUPLE})
-	return [rel_sensors, rel_uids]
-
 
 def check_and_connect_database():
 	# todo refac
@@ -84,7 +29,7 @@ def check_and_connect_database():
 		db = Database(host=database_host, port=database_port, user=user, password=password, database=database)
 	except Error.DatabaseError:
 		# db not available. If WLAN should be configured, try to get it back up
-		if config.WLAN_CONFIGURED == '1':
+		if config_test.WLAN_CONFIGURED == '1':
 			try:
 				WLAN.check_interface()
 			except WindowsError:
@@ -92,7 +37,7 @@ def check_and_connect_database():
 			except Error.InterfaceError:
 				# try to restart WLAN three times
 				for x in range(0, 3):
-					WLAN.restart_interface(config.INTERFACE_NAME)
+					WLAN.restart_interface(config_test.INTERFACE_NAME)
 					try:
 						WLAN.check_interface()
 					except WindowsError:
